@@ -137,6 +137,7 @@ button.playing{animation:pulse 1s ease-in-out infinite}
 @keyframes pop{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--acc) 40%,transparent)}100%{box-shadow:0 0 0 8px transparent}}
 @keyframes okpop{0%{transform:scale(.96)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
 }
+#gbtn{color-scheme:light}
 </style>
 </head>
 <body>
@@ -210,7 +211,7 @@ if(!window.claude){
           try{setSync("正在登入……");await Au.signInWithCredential(auth,Au.GoogleAuthProvider.credential(r.credential))}
           catch(e){setSync("登入沒有成功（"+(e&&e.code||"error")+"）")}
         }});
-        google.accounts.id.renderButton($("gbtn"),{type:"standard",theme:"outline",size:"medium",shape:"pill",text:"signin",locale:"zh-HK"});
+        const dk=document.documentElement.dataset.theme==="dark"||(document.documentElement.dataset.theme!=="light"&&matchMedia("(prefers-color-scheme:dark)").matches);google.accounts.id.renderButton($("gbtn"),{type:"standard",theme:dk?"filled_black":"outline",size:"medium",shape:"pill",text:"signin",locale:"zh-HK"});
       }catch(e){}
     };
     document.head.appendChild(gis);
