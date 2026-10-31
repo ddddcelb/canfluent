@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light dark">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<meta name="theme-color" content="#f4fbf8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1d3532" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="粵語流利說">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>粵語流利說 CanFluent</title>
+<style>
+:root{--bg:#f4fbf8;--card:#fff;--ink:#16332e;--mute:#4d6761;--line:#cfe5de;--acc:#0a8a72;--accfg:#fff;--warn:#fff1d6;--warnfg:#6b4a00;
+--t1:#c2410c;--t2:#a16207;--t3:#15803d;--t4:#0e7490;--t5:#4f46e5;--t6:#be185d;
+color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d3532;--card:#294642;--ink:#f2faf8;--mute:#bcd3cd;--line:#43665f;--acc:#52e3c5;--accfg:#04231c;--warn:#3a2f10;--warnfg:#f3d58a;--t1:#fb923c;--t2:#facc15;--t3:#4ade80;--t4:#22d3ee;--t5:#a5b4fc;--t6:#f472b6;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1d3532;--card:#294642;--ink:#f2faf8;--mute:#bcd3cd;--line:#43665f;--acc:#52e3c5;--accfg:#04231c;--warn:#3a2f10;--warnfg:#f3d58a;--t1:#fb923c;--t2:#facc15;--t3:#4ade80;--t4:#22d3ee;--t5:#a5b4fc;--t6:#f472b6;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,color-mix(in srgb,var(--acc) 10%,var(--bg)),var(--bg) 260px) no-repeat,var(--bg);color:var(--ink);font:16px/1.5 "Noto Sans TC","PingFang HK","Microsoft JhengHei",system-ui,sans-serif}
+main{max-width:920px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:26px;margin:4px 0 4px}
+.sub{color:var(--mute);margin:0 0 14px}
+#head{display:flex;align-items:center;gap:12px;margin:4px 0 8px}
+#head h1{flex:1 1 0;min-width:0;margin:0;order:1}
+#top{order:2;display:flex;justify-content:flex-end;align-items:center;gap:10px;flex:none}
+#acct{position:relative;display:flex;align-items:center}
+#slow{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 8px 0 12px;border-radius:999px;font-size:14px}
+#slow i{position:relative;width:34px;height:20px;border-radius:999px;background:var(--line);transition:background .2s;flex:none}
+#slow i::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+#slow[aria-checked="true"] i{background:var(--acc)}
+#slow[aria-checked="true"] i::after{transform:translateX(14px)}
+#slow[aria-checked="true"] span{font-weight:700}
+#acct[hidden]{display:none}
+#av{width:38px;height:38px;border-radius:50%;padding:0;border:2px solid var(--line);background:var(--acc);color:var(--accfg);font-weight:700;font-size:17px;overflow:hidden;cursor:pointer}
+#av img{width:100%;height:100%;object-fit:cover;display:block}
+#amenu{position:absolute;top:44px;right:0;z-index:20;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:200px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+#amenu[hidden]{display:none}
+#aname{font-weight:700}#amail{color:var(--mute);font-size:14px;margin:0 0 10px;word-break:break-all}
+#warn{background:var(--warn);color:var(--warnfg);padding:10px 12px;border-radius:8px;margin:0 0 14px;font-size:14px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;flex:1 1 100%}
+button,a.b{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:7px 12px;text-decoration:none;display:inline-block;white-space:nowrap}
+button:focus-visible,a.b:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.tab[aria-pressed="true"]{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--mute);margin:0 0 14px}
+.legend b{font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.card.done{border-color:var(--acc)}
+.han{font-size:38px;line-height:1.15;font-weight:600}
+.jp{font-size:20px;letter-spacing:.02em}
+.jp b{font-weight:800}
+.t1{color:var(--t1)}.t2{color:var(--t2)}.t3{color:var(--t3)}.t4{color:var(--t4)}.t5{color:var(--t5)}.t6{color:var(--t6)}
+.mean{color:var(--mute);font-size:14px;min-height:21px}
+.row{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.row button,.row a.b{padding:6px 10px;font-size:14px}
+.rec[aria-pressed="true"]{background:#b91c1c;color:#fff;border-color:#b91c1c}
+.ok[aria-pressed="true"]{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
+
+.row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
+.row .ib{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 2px 6px;font-size:13px;line-height:1.2;min-height:56px;border-radius:10px}
+.row .ib svg{width:22px;height:22px;flex:none}
+.row .dict{grid-column:1;grid-row:2}
+.row .ok{grid-column:2 / 5;grid-row:2;flex-direction:row;gap:8px;font-size:15px}
+.row .ok[aria-pressed="false"]{border-style:dashed}
+.row button.rec[aria-pressed="false"]{color:var(--ink)}
+#searchbar{margin:0 0 12px}
+#q{width:100%;font:inherit;padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);-webkit-appearance:none;appearance:none}
+#q:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.rv{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 12px;padding:12px 14px;border-radius:10px;border:1px solid var(--acc);background:color-mix(in srgb,var(--acc) 14%,var(--card));color:var(--ink);text-decoration:none}
+.rv b{font-size:17px}.rv span{color:var(--mute);font-size:14px}
+.rv.none{border-color:var(--line);background:var(--card);color:var(--mute);font-size:14px}
+a.rv:active{transform:scale(.98)}
+.catl{font-size:12px;color:var(--mute)}
+.empty{grid-column:1/-1;text-align:center;color:var(--mute);padding:28px 0}
+#pall{display:inline-flex;align-items:center;gap:6px}
+#pall svg{width:18px;height:18px}
+#pall[aria-pressed="true"]{background:var(--acc);color:var(--accfg);border-color:var(--acc);font-weight:700}
+.row .no{grid-column:2;grid-row:2}
+.row .yes{grid-column:3 / 5;grid-row:2;flex-direction:row;gap:8px;font-size:15px;background:var(--acc);color:var(--accfg);border-color:var(--acc);font-weight:700}
+.msg{font-size:13px;color:var(--mute);min-height:18px}
+.tip{margin-top:20px;color:var(--mute);font-size:14px}
+.about{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);color:var(--mute);font-size:14px}
+.about h2{font-size:16px;color:var(--ink);margin:0 0 8px}
+.about h3{font-size:14px;color:var(--ink);margin:14px 0 4px}
+.about p,.about ul{margin:0 0 6px}
+.about ul{padding-left:20px}
+[hidden]{display:none!important}
+.wk{margin:0 0 12px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:0 14px}
+.wk summary{cursor:pointer;padding:12px 0;font-weight:700;display:flex;justify-content:space-between;gap:8px}
+.wk summary span{font-weight:400;color:var(--mute);font-size:14px}
+.wk summary{align-items:center;list-style:none}
+.wk summary::-webkit-details-marker{display:none}
+.wk .nm{flex:1;min-width:0}
+.wk .chev{flex:none;width:9px;height:9px;margin:0 4px 3px 4px;border-right:2px solid var(--mute);border-bottom:2px solid var(--mute);transform:rotate(45deg);transition:transform .2s,margin .2s}
+.wk[open] .chev{transform:rotate(-135deg);margin-top:5px;margin-bottom:0}
+.lessons{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;padding:0 0 14px}
+.les{display:block;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:color-mix(in srgb,var(--acc) 7%,var(--card))}
+.les:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.les b{display:block;font-size:17px}
+.les small{color:var(--mute)}
+.les.full{border-color:var(--acc)}
+.pb{height:5px;border-radius:3px;background:var(--line);margin-top:8px;overflow:hidden}
+.pb i{display:block;height:100%;background:var(--acc)}
+.cd{color:var(--mute);font-size:14px;margin:0 0 10px}
+.les.todo{border-style:dashed;opacity:.65;cursor:default}
+.bottombar{display:flex;justify-content:center;margin:22px 0 0}
+.bottombar button{padding:11px 28px;font-size:16px;font-weight:700;border-color:var(--acc)}
+button,a.b,.les,.card{-webkit-tap-highlight-color:transparent}
+button,a.b{transition:background-color .12s,border-color .12s,color .12s,box-shadow .12s,transform .1s;box-shadow:0 1px 0 var(--line)}
+@media (hover:hover){
+button:not(:disabled):not([aria-pressed="true"]):not(.playing):hover,a.b:hover{background:color-mix(in srgb,var(--acc) 14%,var(--card));border-color:var(--acc);box-shadow:0 2px 6px color-mix(in srgb,var(--acc) 30%,transparent)}
+.les:not(.todo):hover{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 12%,var(--bg));transform:translateY(-2px);box-shadow:0 4px 10px color-mix(in srgb,var(--acc) 25%,transparent)}
+.wk summary:hover{color:var(--acc)}
+}
+button:not(:disabled):active,a.b:active{transform:scale(.92);background:var(--acc);color:var(--accfg);border-color:var(--acc);box-shadow:none}
+.les:not(.todo):active{transform:scale(.97);background:color-mix(in srgb,var(--acc) 28%,var(--bg))}
+button:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.tab[aria-pressed="true"],#slow[aria-pressed="true"]{background:var(--acc);color:var(--accfg);border-color:var(--acc);font-weight:700;box-shadow:0 2px 8px color-mix(in srgb,var(--acc) 45%,transparent)}
+button.playing{background:var(--acc);color:var(--accfg);border-color:var(--acc);font-weight:700}
+.rec[aria-pressed="true"]{box-shadow:0 0 0 3px color-mix(in srgb,#b91c1c 35%,transparent);font-weight:700}
+.ok[aria-pressed="true"]{font-weight:700;box-shadow:0 2px 8px color-mix(in srgb,var(--acc) 45%,transparent)}
+.card.done{background:color-mix(in srgb,var(--acc) 9%,var(--card));border-width:2px}
+.card.playing-card{border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 25%,transparent)}
+@media (prefers-reduced-motion:no-preference){
+.card{transition:border-color .2s,background-color .2s,box-shadow .2s}
+button.playing{animation:pulse 1s ease-in-out infinite}
+.rec[aria-pressed="true"]{animation:recpulse 1s ease-in-out infinite}
+.card.pop{animation:pop .45s ease-out}
+.card.pop .ok{animation:okpop .3s ease-out}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--acc) 55%,transparent)}50%{box-shadow:0 0 0 7px transparent}}
+@keyframes recpulse{0%,100%{box-shadow:0 0 0 0 rgba(185,28,28,.6)}50%{box-shadow:0 0 0 8px rgba(185,28,28,0)}}
+@keyframes pop{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--acc) 40%,transparent)}100%{box-shadow:0 0 0 8px transparent}}
+@keyframes okpop{0%{transform:scale(.96)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+}
+</style>
+</head>
+<body>
+<main>
+<header id="head"><div id="top"><div id="acct" hidden><div id="gbtn"></div><button id="av" hidden aria-label="帳號"></button><div id="amenu" hidden><div id="aname"></div><div id="amail"></div><button id="aout">登出</button></div></div></div>
+<h1>粵語流利說 CanFluent</h1></header>
+<p class="sub">本站是為普通話母語者學習粵語口語而做的練習頁面，涵蓋發音、基礎詞彙和日常場景。</p>
+<div id="warn" hidden></div>
+<div class="bar">
+  <button id="back" hidden>← 返回目錄</button>
+  <button id="pall" aria-pressed="false" hidden></button>
+ <button id="slow" role="switch" aria-checked="false" aria-label="慢速播放"><span>慢速</span><i></i></button>
+  <span id="prog" class="sub" style="margin:0"></span>
+  <span id="sync" class="sub" style="margin:0"></span>
+</div>
+<div class="legend" id="legend" aria-label="聲調顏色" hidden>
+  <span><b class="t1">1</b> 高平</span><span><b class="t2">2</b> 高升</span><span><b class="t3">3</b> 中平</span>
+  <span><b class="t4">4</b> 低降</span><span><b class="t5">5</b> 低升</span><span><b class="t6">6</b> 低平</span>
+</div>
+<div id="searchbar"><input id="q" type="search" placeholder="搜索詞句、粵拼或意思" aria-label="搜索詞句、粵拼或意思" autocomplete="off"></div>
+<div id="home"></div>
+<div class="grid" id="grid" hidden></div>
+<div class="bottombar" id="bottombar" hidden><button id="back2">← 返回目錄</button></div>
+<p class="tip">標準音為合成語音，聲調偶爾會偏差。拿不準時，點「粵典」聽真人發音，再回來跟讀。</p>
+<section class="about" id="about">
+<h3>內容來源</h3>
+<p>詞彙、句子和粵拼由作者借助 AI（Claude）整理，不是摘錄自某本教材或詞典，也沒有經過粵語母語者逐條審定。</p>
+<h3>可能有錯</h3>
+<ul>
+<li>粵拼、用字和說法可能有錯漏，也可能和你身邊人的習慣不同，例如茶餐廳術語、懶音、各地口語差異。</li>
+<li>合成語音的聲調偶爾會不準，長句更容易出錯。</li>
+<li>拿不準時，請以真人發音為準，可以點每張卡片上的「粵典」對照 words.hk，或請教粵語老師和母語者。</li>
+<li>本站只供學習參考。</li>
+</ul>
+<h3>歡迎反饋</h3>
+<p>發現錯誤或有建議，歡迎<a href="https://forms.gle/dg1jAocqKPMPTMvi6" target="_blank" rel="noopener">填寫反饋表單</a>。請寫明是哪一課、哪一個詞或句子，以及你認為正確的說法。</p>
+<h3>學習進度與隱私</h3>
+<p>進度保存在本機；如果你點「Google 登入」，進度會同步到雲端帳號，方便換設備。除進度外，不會收集其他資料；錄音只在你的設備上播放，不會上傳。如果不登入，換瀏覽器或換設備前，可以先導出進度，再在新的地方導入。</p>
+<p><button id="exp">導出進度</button> <button id="imp">導入進度</button><input type="file" id="impf" accept=".json,application/json" hidden></p>
+<h3>離線使用</h3>
+<p>下載全部音頻後，沒有網絡也能聽（約 15MB，建議在 Wi-Fi 下進行）。</p>
+<p><button id="offb">下載全部音頻</button> <span id="offs"></span></p>
+<p id="ver" style="font-size:12px;margin-top:14px">版本 2026-10-31</p>
+</section>
+</main>
+<script type="module">
+if(!window.claude){
+  const cfg={apiKey:"AIzaSyAc_wG9HyJrUkkxrxeOhNt0NTPCKOYqqH0",authDomain:"canfluent.firebaseapp.com",projectId:"canfluent",storageBucket:"canfluent.firebasestorage.app",messagingSenderId:"691518421901",appId:"1:691518421901:web:c469ed126665bb40531bc4"};
+  const CID="691518421901-utncb3k7p05hme3t4ijibf1n7lknptfn.apps.googleusercontent.com";
+  try{
+    const B="https://www.gstatic.com/firebasejs/10.12.2/";
+    const [A,Au,Fs]=await Promise.all([import(B+"firebase-app.js"),import(B+"firebase-auth.js"),import(B+"firebase-firestore.js")]);
+    const app=A.initializeApp(cfg),auth=Au.getAuth(app),fs=Fs.getFirestore(app);
+    const $=id=>document.getElementById(id);
+    $("acct").hidden=false;
+    let user=null,timer=null;
+    const refOf=u=>Fs.doc(fs,"users",u.uid);
+    const put=async m=>{await Fs.setDoc(refOf(user),{ev:m,done:Object.keys(m).filter(k=>m[k][0]===1).map(Number),t:Date.now()})};
+    window.cfPush=(m,t)=>{
+      if(!user)return;clearTimeout(timer);
+      timer=setTimeout(async()=>{
+        try{await put(m);setSync("雲端已同步（Google）")}
+        catch(e){setSync("雲端同步失敗，進度仍保存在本機")}
+      },800);
+    };
+    // Google Identity Services：不用彈窗，iPhone Safari／主屏幕模式也能登入
+    const gis=document.createElement("script");gis.src="https://accounts.google.com/gsi/client";gis.async=true;
+    gis.onload=()=>{
+      try{
+        google.accounts.id.initialize({client_id:CID,auto_select:false,use_fedcm_for_prompt:true,callback:async r=>{
+          try{setSync("正在登入……");await Au.signInWithCredential(auth,Au.GoogleAuthProvider.credential(r.credential))}
+          catch(e){setSync("登入沒有成功（"+(e&&e.code||"error")+"）")}
+        }});
+        google.accounts.id.renderButton($("gbtn"),{type:"standard",theme:"outline",size:"medium",shape:"pill",text:"signin",locale:"zh-HK"});
+      }catch(e){}
+    };
+    document.head.appendChild(gis);
+    $("av").onclick=e=>{e.stopPropagation();$("amenu").hidden=!$("amenu").hidden};
+    document.addEventListener("click",e=>{if(!$("acct").contains(e.target))$("amenu").hidden=true});
+    $("aout").onclick=async()=>{$("amenu").hidden=true;try{google.accounts.id.disableAutoSelect()}catch(e){}try{await Au.signOut(auth)}catch(e){}};
+    const show=u=>{
+      $("gbtn").hidden=!!u;$("av").hidden=!u;if(!u){$("amenu").hidden=true;return}
+      const av=$("av");av.textContent="";
+      if(u.photoURL){const im=new Image();im.referrerPolicy="no-referrer";im.alt="";im.src=u.photoURL;im.onerror=()=>{av.textContent=(u.displayName||u.email||"?").trim().charAt(0).toUpperCase()};av.appendChild(im)}
+      else av.textContent=(u.displayName||u.email||"?").trim().charAt(0).toUpperCase();
+      $("aname").textContent=u.displayName||"已登入";$("amail").textContent=u.email||"";
+    };
+    Au.onAuthStateChanged(auth,async u=>{
+      user=u;show(u);
+      if(!u){setSync("");return}
+      try{
+        setSync("正在同步……");
+        const snap=await Fs.getDoc(refOf(u)),g=cfGet();
+        let remote={};
+        if(snap.exists()){
+          const d=snap.data();
+          if(d.ev)remote=cfClean(d.ev);
+          else{const t0=+d.t||1,o={};(Array.isArray(d.done)?d.done:[]).forEach(i=>{if(Number.isInteger(i))o[i]=[1,t0,0,t0+864e5]});remote=cfClean(o)}
+        }
+        const m=cfMerge(g.ev,remote);
+        if(!cfEq(m,g.ev))cfApply(m,Date.now());
+        if(!snap.exists()||!cfEq(m,remote))await put(m);
+        setSync("雲端已同步（Google）");
+      }catch(e){setSync("雲端讀取失敗，進度仍保存在本機（"+(e&&e.code||"error")+"）")}
+    });
+  }catch(e){}
+}
+</script>
+<script>
+const D=[["聲調", "詩", "si1", "第 1 聲"],
+["聲調", "史", "si2", "第 2 聲"],
+["聲調", "試", "si3", "第 3 聲"],
+["聲調", "時", "si4", "第 4 聲"],
+["聲調", "市", "si5", "第 5 聲"],
+["聲調", "事", "si6", "第 6 聲"],
+["聲調", "分", "fan1", "分開"],
+["聲調", "粉", "fan2", "粉"],
+["聲調", "訓", "fan3", "訓"],
+["聲調", "焚", "fan4", "焚燒"],
+["聲調", "憤", "fan5", "憤怒"],
+["聲調", "份", "fan6", "一份"],
+["入聲", "一", "jat1", "收尾短促，不吐氣"],
+["入聲", "八", "baat3", "收尾短促，不吐氣"],
+["入聲", "十", "sap6", "收尾短促，不吐氣"],
+["入聲", "識", "sik1", "會、認識"],
+["入聲", "食", "sik6", "吃"],
+["聲母（二）粵語特有：ng、gw、kw", "我", "ngo5", "ng- 帶鼻音，不要省略"],
+["聲母（二）粵語特有：ng、gw、kw", "牙", "ngaa4", "牙齒"],
+["聲母（二）粵語特有：ng、gw、kw", "國", "gwok3", "gw- 圓唇"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "日", "jat6", "日、天"],
+["問候", "你好", "nei5 hou2", "你好"],
+["問候", "早晨", "zou2 san4", "早上好"],
+["問候", "晚安", "maan5 on1", "晚安"],
+["問候", "唔該", "m4 goi1", "謝謝（對方服務你）／請"],
+["問候", "多謝", "do1 ze6", "謝謝（禮物或大忙）"],
+["問候", "對唔住", "deoi3 m4 zyu6", "對不起"],
+["問候", "唔緊要", "m4 gan2 jiu3", "沒關係"],
+["問候", "再見", "zoi3 gin3", "再見"],
+["數字", "二", "ji6", "2"],
+["數字", "三", "saam1", "3"],
+["數字", "四", "sei3", "4"],
+["數字", "五", "ng5", "5"],
+["數字", "六", "luk6", "6"],
+["數字", "七", "cat1", "7"],
+["數字", "九", "gau2", "9"],
+["數字", "五蚊", "ng5 man1", "5 元"],
+["數字", "二十蚊", "ji6 sap6 man1", "20 元"],
+["數字", "幾多錢", "gei2 do1 cin2", "多少錢"],
+["自介", "我叫……", "ngo5 giu3 ...", "我叫……（換成你的名字）"],
+["自介", "我係……人", "ngo5 hai6 ... jan4", "我是……人"],
+["自介", "我住喺……", "ngo5 zyu6 hai2 ...", "我住在……"],
+["自介", "我識少少廣東話", "ngo5 sik1 siu2 siu2 gwong2 dung1 waa2", "我會一點廣東話"],
+["自介", "唔該講慢啲", "m4 goi1 gong2 maan6 di1", "請說慢一點"],
+["數字進階", "零", "ling4", "0"],
+["數字進階", "十一", "sap6 jat1", "11"],
+["數字進階", "廿", "jaa6", "20（口語說法）"],
+["數字進階", "三十", "saam1 sap6", "30"],
+["數字進階", "九十九", "gau2 sap6 gau2", "99"],
+["數字進階", "一百", "jat1 baak3", "100"],
+["數字進階", "一千", "jat1 cin1", "1000"],
+["數字進階", "兩個", "loeng5 go3", "兩個（數量用「兩」，不用「二」）"],
+["時間", "而家", "ji4 gaa1", "現在"],
+["時間", "今日", "gam1 jat6", "今天"],
+["時間", "琴日", "kam4 jat6", "昨天"],
+["時間", "聽日", "ting1 jat6", "明天"],
+["時間", "朝早", "ziu1 zou2", "早上"],
+["時間", "下晝", "haa6 zau3", "下午"],
+["時間", "夜晚", "je6 maan5", "晚上"],
+["時間", "幾點", "gei2 dim2", "幾點鐘"],
+["時間", "三點半", "saam1 dim2 bun3", "三點半"],
+["時間", "星期一", "sing1 kei4 jat1", "星期一"],
+["時間", "幾號", "gei2 hou6", "幾號"],
+["代詞指示", "你", "nei5", "你"],
+["代詞指示", "佢", "keoi5", "他／她"],
+["代詞指示", "我哋", "ngo5 dei6", "我們"],
+["代詞指示", "你哋", "nei5 dei6", "你們"],
+["代詞指示", "佢哋", "keoi5 dei6", "他們"],
+["代詞指示", "呢個", "ni1 go3", "這個"],
+["代詞指示", "嗰個", "go2 go3", "那個"],
+["代詞指示", "係", "hai6", "是"],
+["代詞指示", "唔係", "m4 hai6", "不是"],
+["代詞指示", "有", "jau5", "有"],
+["代詞指示", "冇", "mou5", "沒有"],
+["疑問詞", "咩", "me1", "什麼"],
+["疑問詞", "邊個", "bin1 go3", "誰／哪個"],
+["疑問詞", "邊度", "bin1 dou6", "哪裡"],
+["疑問詞", "點解", "dim2 gaai2", "為什麼"],
+["疑問詞", "點樣", "dim2 joeng2", "怎麼樣"],
+["疑問詞", "幾時", "gei2 si4", "什麼時候"],
+["常用句型", "我想……", "ngo5 soeng2 ...", "我想……"],
+["常用句型", "我要……", "ngo5 jiu3 ...", "我要……"],
+["常用句型", "有冇……？", "jau5 mou5 ...", "有沒有……？"],
+["常用句型", "……喺邊度？", "... hai2 bin1 dou6", "……在哪裡？"],
+["常用句型", "平啲得唔得？", "peng4 di1 dak1 m4 dak1", "便宜點行不行？"],
+["常用句型", "我唔明白", "ngo5 m4 ming4 baak6", "我不明白"],
+["常用句型", "可唔可以再講一次？", "ho2 m4 ho2 ji5 zoi3 gong2 jat1 ci3", "可以再說一次嗎？"],
+["稱呼身份", "屋企人", "uk1 kei2 jan4", "家人"],
+["稱呼身份", "爸爸", "baa4 baa1", "爸爸"],
+["稱呼身份", "媽媽", "maa4 maa1", "媽媽"],
+["稱呼身份", "老公", "lou5 gung1", "丈夫"],
+["稱呼身份", "老婆", "lou5 po4", "妻子"],
+["稱呼身份", "朋友", "pang4 jau5", "朋友"],
+["稱呼身份", "同事", "tung4 si6", "同事"],
+["稱呼身份", "老細", "lou5 sai3", "老闆"],
+["稱呼身份", "學生", "hok6 saang1", "學生"],
+["稱呼身份", "內地人", "noi6 dei6 jan4", "內地人"],
+["稱呼身份", "香港人", "hoeng1 gong2 jan4", "香港人"],
+["稱呼身份", "普通話", "pou2 tung1 waa2", "普通話"],
+["常用動詞", "去", "heoi3", "去"],
+["常用動詞", "嚟", "lai4", "來"],
+["常用動詞", "飲", "jam2", "喝"],
+["常用動詞", "睇", "tai2", "看"],
+["常用動詞", "買", "maai5", "買"],
+["常用動詞", "講", "gong2", "說"],
+["常用動詞", "聽", "teng1", "聽"],
+["常用動詞", "行", "haang4", "走"],
+["常用動詞", "搭", "daap3", "搭乘"],
+["常用動詞", "等", "dang2", "等"],
+["常用動詞", "做嘢", "zou6 je5", "做事、工作"],
+["常用動詞", "返工", "faan1 gung1", "上班"],
+["常用動詞", "收工", "sau1 gung1", "下班"],
+["常用動詞", "瞓覺", "fan3 gaau3", "睡覺"],
+["形容詞", "好", "hou2", "好、很"],
+["形容詞", "唔好", "m4 hou2", "不好"],
+["形容詞", "大", "daai6", "大"],
+["形容詞", "細", "sai3", "小"],
+["形容詞", "貴", "gwai3", "貴"],
+["形容詞", "平", "peng4", "便宜"],
+["形容詞", "快", "faai3", "快"],
+["形容詞", "慢", "maan6", "慢"],
+["形容詞", "好食", "hou2 sik6", "好吃"],
+["形容詞", "好貴", "hou2 gwai3", "很貴"],
+["形容詞", "有啲", "jau5 di1", "有點"],
+["形容詞", "忙", "mong4", "忙"],
+["日期", "一月", "jat1 jyut6", "一月"],
+["日期", "十二月", "sap6 ji6 jyut6", "十二月"],
+["日期", "今個月", "gam1 go3 jyut6", "這個月"],
+["日期", "星期日", "sing1 kei4 jat6", "星期日"],
+["日期", "下個星期", "haa6 go3 sing1 kei4", "下週"],
+["日期", "週末", "zau1 mut6", "週末"],
+["日期", "今年", "gam1 nin4", "今年"],
+["日期", "去年", "heoi3 nin4", "去年"],
+["日期", "生日", "saang1 jat6", "生日"],
+["日期", "我三十歲", "ngo5 saam1 sap6 seoi3", "我三十歲（換成你的年齡）"],
+["方位", "左邊", "zo2 bin1", "左邊"],
+["方位", "右邊", "jau6 bin1", "右邊"],
+["方位", "前面", "cin4 min6", "前面"],
+["方位", "後面", "hau6 min6", "後面"],
+["方位", "上面", "soeng6 min6", "上面"],
+["方位", "下面", "haa6 min6", "下面"],
+["方位", "呢度", "ni1 dou6", "這裡"],
+["方位", "嗰度", "go2 dou6", "那裡"],
+["方位", "直行", "zik6 haang4", "直走"],
+["方位", "轉左", "zyun3 zo2", "左轉"],
+["方位", "轉右", "zyun3 jau6", "右轉"],
+["方位", "到喇", "dou3 laa3", "到了"],
+["飲食基礎", "水", "seoi2", "水"],
+["飲食基礎", "奶茶", "naai5 caa4", "奶茶"],
+["飲食基礎", "咖啡", "gaa3 fe1", "咖啡"],
+["飲食基礎", "飯", "faan6", "飯"],
+["飲食基礎", "麵", "min6", "麵"],
+["飲食基礎", "熱", "jit6", "熱"],
+["飲食基礎", "凍", "dung3", "冰涼"],
+["飲食基礎", "少甜", "siu2 tim4", "少糖"],
+["飲食基礎", "走冰", "zau2 bing1", "去冰"],
+["綜合句子", "我係內地人，而家住喺香港。", "ngo5 hai6 noi6 dei6 jan4, ji4 gaa1 zyu6 hai2 hoeng1 gong2", "我是內地人，現在住在香港。"],
+["綜合句子", "我喺……做嘢。", "ngo5 hai2 ... zou6 je5", "我在……工作。（換成你的公司或行業）"],
+["綜合句子", "我朝早七點起身。", "ngo5 ziu1 zou2 cat1 dim2 hei2 san1", "我早上七點起床。"],
+["綜合句子", "我今日好忙。", "ngo5 gam1 jat6 hou2 mong4", "我今天很忙。"],
+["綜合句子", "我聽日朝早九點返工。", "ngo5 ting1 jat6 ziu1 zou2 gau2 dim2 faan1 gung1", "我明天早上九點上班。"],
+["綜合句子", "請問而家幾點？", "cing2 man6 ji4 gaa1 gei2 dim2", "請問現在幾點？"],
+["綜合句子", "我想買呢個，幾多錢？", "ngo5 soeng2 maai5 ni1 go3, gei2 do1 cin2", "我想買這個，多少錢？"],
+["綜合句子", "唔該，我想去地鐵站。", "m4 goi1, ngo5 soeng2 heoi3 dei6 tit3 zaam6", "麻煩你，我想去地鐵站。"],
+["綜合句子", "你食咗飯未呀？", "nei5 sik6 zo2 faan6 mei6 aa3", "你吃飯了沒有？"],
+["綜合句子", "好耐冇見。", "hou2 noi6 mou5 gin3", "好久不見。"],
+["聲母（一）和普通話接近", "爸", "baa1", "b-：不送氣，和普通話 b 接近"],
+["聲母（一）和普通話接近", "怕", "paa3", "p-：送氣。和「爸」成對比，手放嘴前能感到氣流"],
+["聲母（一）和普通話接近", "媽", "maa1", "m-"],
+["聲母（一）和普通話接近", "花", "faa1", "f-"],
+["聲母（一）和普通話接近", "打", "daa2", "d-：不送氣"],
+["聲母（一）和普通話接近", "他", "taa1", "t-：送氣。和「打」成對比"],
+["聲母（一）和普通話接近", "你", "nei5", "n-。很多香港人讀成 lei5（懶音），標準讀 n-"],
+["聲母（一）和普通話接近", "老", "lou5", "l-"],
+["聲母（一）和普通話接近", "家", "gaa1", "g-：不送氣，和普通話 g 接近"],
+["聲母（一）和普通話接近", "卡", "kaa1", "k-：送氣。和「家」成對比"],
+["聲母（二）粵語特有：ng、gw、kw", "鵝", "ngo4", "ng-：舌根抬起帶鼻音，普通話沒有，別省略成 o"],
+["聲母（一）和普通話接近", "好", "hou2", "h-"],
+["聲母（二）粵語特有：ng、gw、kw", "瓜", "gwaa1", "gw-：g 加圓唇，嘴先圓再發音"],
+["聲母（二）粵語特有：ng、gw、kw", "廣", "gwong2", "gw-。對比：港 gong2 沒有圓唇"],
+["聲母（二）粵語特有：ng、gw、kw", "國", "gwok3", "gw-。對比：角 gok3 沒有圓唇"],
+["聲母（二）粵語特有：ng、gw、kw", "港", "gong2", "g-。和「廣 gwong2」對比"],
+["聲母（二）粵語特有：ng、gw、kw", "角", "gok3", "g-。和「國 gwok3」對比"],
+["聲母（二）粵語特有：ng、gw、kw", "框", "kwaang1", "kw-：k 加圓唇，送氣"],
+["聲母（二）粵語特有：ng、gw、kw", "困", "kwan3", "kw-"],
+["聲母（二）粵語特有：ng、gw、kw", "群", "kwan4", "kw-"],
+["聲母（二）粵語特有：ng、gw、kw", "葵", "kwai4", "kw-"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "話", "waa6", "w-"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "左", "zo2", "z-：普通話 z、zh 在粵語都讀 z，不用捲舌"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "茶", "caa4", "c-：送氣，普通話 c、ch 在粵語都讀 c"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "沙", "saa1", "s-：普通話 s、sh 在粵語都讀 s"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "有", "jau5", "j-：像英語 y，不是普通話 j"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "人", "jan4", "j-，不是 r"],
+["韻母（一）aa 系", "沙", "saa1", "aa：嘴張大，長元音"],
+["韻母（一）aa 系", "街", "gaai1", "aai"],
+["韻母（一）aa 系", "教", "gaau3", "aau"],
+["韻母（一）aa 系", "三", "saam1", "aam"],
+["韻母（一）aa 系", "山", "saan1", "aan"],
+["韻母（一）aa 系", "橙", "caang2", "aang"],
+["韻母（一）aa 系", "八", "baat3", "aat：收尾 -t 短促"],
+["韻母（一）aa 系", "百", "baak3", "aak：收尾 -k 短促"],
+["韻母（二）短 a 系", "心", "sam1", "am：短 a，和「三 saam1」對比"],
+["韻母（二）短 a 系", "新", "san1", "an：短 a，和「山 saan1」對比"],
+["韻母（二）短 a 系", "雞", "gai1", "ai"],
+["韻母（二）短 a 系", "狗", "gau2", "au"],
+["韻母（二）短 a 系", "登", "dang1", "ang"],
+["韻母（二）短 a 系", "十", "sap6", "ap：收尾 -p 短促"],
+["韻母（二）短 a 系", "一", "jat1", "at：短 a，和「八 baat3」對比"],
+["韻母（二）短 a 系", "北", "bak1", "ak：短 a，和「百 baak3」對比"],
+["韻母（三）e、i 系", "車", "ce1", "e"],
+["韻母（三）e、i 系", "四", "sei3", "ei"],
+["韻母（三）e、i 系", "鄭", "zeng6", "eng"],
+["韻母（三）e、i 系", "尺", "cek3", "ek"],
+["韻母（三）e、i 系", "詩", "si1", "i"],
+["韻母（三）e、i 系", "小", "siu2", "iu"],
+["韻母（三）e、i 系", "店", "dim3", "im"],
+["韻母（三）e、i 系", "先", "sin1", "in"],
+["韻母（三）e、i 系", "星", "sing1", "ing"],
+["韻母（三）e、i 系", "葉", "jip6", "ip"],
+["韻母（三）e、i 系", "熱", "jit6", "it"],
+["韻母（三）e、i 系", "食", "sik6", "ik"],
+["韻母（四）o、u 系", "多", "do1", "o"],
+["韻母（四）o、u 系", "開", "hoi1", "oi"],
+["韻母（四）o、u 系", "好", "hou2", "ou"],
+["韻母（四）o、u 系", "看", "hon3", "on"],
+["韻母（四）o、u 系", "唐", "tong4", "ong"],
+["韻母（四）o、u 系", "渴", "hot3", "ot"],
+["韻母（四）o、u 系", "國", "gwok3", "ok"],
+["韻母（四）o、u 系", "苦", "fu2", "u"],
+["韻母（四）o、u 系", "杯", "bui1", "ui"],
+["韻母（四）o、u 系", "官", "gun1", "un"],
+["韻母（四）o、u 系", "東", "dung1", "ung"],
+["韻母（四）o、u 系", "活", "wut6", "ut"],
+["韻母（四）o、u 系", "屋", "uk1", "uk"],
+["韻母（五）圓唇韻 oe、eo", "靴", "hoe1", "oe：嘴半圓，舌位比 o 前"],
+["韻母（五）圓唇韻 oe、eo", "想", "soeng2", "oeng"],
+["韻母（五）圓唇韻 oe、eo", "約", "joek3", "oek"],
+["韻母（五）圓唇韻 oe、eo", "水", "seoi2", "eoi：粵語特有，不是普通話 ui"],
+["韻母（五）圓唇韻 oe、eo", "準", "zeon2", "eon"],
+["韻母（五）圓唇韻 oe、eo", "出", "ceot1", "eot"],
+["韻母（六）yu 系與 m、ng", "魚", "jyu4", "yu：像普通話 ü，嘴圓"],
+["韻母（六）yu 系與 m、ng", "完", "jyun4", "yun"],
+["韻母（六）yu 系與 m、ng", "月", "jyut6", "yut"],
+["韻母（六）yu 系與 m、ng", "唔", "m4", "m：單獨成音節，不是 mu"],
+["韻母（六）yu 系與 m、ng", "五", "ng5", "ng：單獨成音節，鼻音"],
+["粵拼入門", "詩", "si1", "s + i + 1：聲母＋韻母＋聲調，粵拼每個音節都這樣拆"],
+["粵拼入門", "廣", "gwong2", "gw + ong + 2"],
+["粵拼入門", "食", "sik6", "s + ik + 6：-k 收尾是入聲"],
+["粵拼入門", "粵", "jyut6", "j + yut + 6"],
+["粵拼入門", "語", "jyu5", "j + yu + 5"],
+["粵拼入門", "好", "hou2", "h + ou + 2"],
+["粵拼入門", "我", "ngo5", "ng + o + 5：ng 也是一個聲母"],
+["粵拼入門", "啊", "aa3", "沒有聲母，只有韻母 aa + 聲調 3"],
+["粵拼入門", "唔", "m4", "m 單獨成音節，不是 mu"],
+["粵拼入門", "廣東話", "gwong2 dung1 waa2", "三個音節，各有各的聲調，用空格分開"],
+["粵拼入門", "粵拼", "jyut6 ping3", "粵語拼音方案，英文叫 Jyutping"],
+["粵拼入門", "人", "jan4", "注意：j 讀 y，不是普通話的 j"],
+["粵拼入門", "左", "zo2", "z 不捲舌，粵語沒有 zh、ch、sh"],
+["音節拼讀（一）o 韻", "波", "bo1", "b + o"],
+["音節拼讀（一）o 韻", "婆", "po4", "p + o：送氣"],
+["音節拼讀（一）o 韻", "摸", "mo2", "m + o"],
+["音節拼讀（一）o 韻", "火", "fo2", "f + o"],
+["音節拼讀（一）o 韻", "多", "do1", "d + o"],
+["音節拼讀（一）o 韻", "拖", "to1", "t + o：送氣"],
+["音節拼讀（一）o 韻", "糯", "no6", "n + o"],
+["音節拼讀（一）o 韻", "羅", "lo4", "l + o"],
+["音節拼讀（一）o 韻", "哥", "go1", "g + o"],
+["音節拼讀（一）o 韻", "河", "ho4", "h + o"],
+["音節拼讀（一）o 韻", "左", "zo2", "z + o"],
+["音節拼讀（一）o 韻", "錯", "co3", "c + o：送氣"],
+["音節拼讀（二）aa 韻", "巴", "baa1", "b + aa"],
+["音節拼讀（二）aa 韻", "爬", "paa4", "p + aa：送氣"],
+["音節拼讀（二）aa 韻", "媽", "maa1", "m + aa"],
+["音節拼讀（二）aa 韻", "花", "faa1", "f + aa"],
+["音節拼讀（二）aa 韻", "打", "daa2", "d + aa"],
+["音節拼讀（二）aa 韻", "他", "taa1", "t + aa：送氣"],
+["音節拼讀（二）aa 韻", "拿", "naa4", "n + aa"],
+["音節拼讀（二）aa 韻", "家", "gaa1", "g + aa"],
+["音節拼讀（二）aa 韻", "卡", "kaa1", "k + aa：送氣"],
+["音節拼讀（二）aa 韻", "蝦", "haa1", "h + aa"],
+["音節拼讀（二）aa 韻", "茶", "caa4", "c + aa：送氣"],
+["音節拼讀（二）aa 韻", "沙", "saa1", "s + aa"],
+["最小對立對（一）聲調", "詩、試、事", "si1 / si3 / si6", "三個平調：高、中、低"],
+["最小對立對（一）聲調", "史、市", "si2 / si5", "兩個升調：高升、低升"],
+["最小對立對（一）聲調", "詩、時", "si1 / si4", "高平 vs 低降"],
+["最小對立對（一）聲調", "買、賣", "maai5 / maai6", "5 和 6 最容易混：5 升，6 平"],
+["最小對立對（一）聲調", "九、夠", "gau2 / gau3", "高升 vs 中平"],
+["最小對立對（一）聲調", "媽、麻、馬、罵", "maa1 / maa4 / maa5 / maa6", "同一個音節的四個聲調"],
+["最小對立對（二）長短 a、圓唇、n/l", "三、心", "saam1 / sam1", "長 aa vs 短 a"],
+["最小對立對（二）長短 a、圓唇、n/l", "山、新", "saan1 / san1", "長 aa vs 短 a"],
+["最小對立對（二）長短 a、圓唇、n/l", "百、北", "baak3 / bak1", "長 aa vs 短 a，收尾都是 -k"],
+["最小對立對（二）長短 a、圓唇、n/l", "港、廣", "gong2 / gwong2", "g vs gw：後者嘴要先圓"],
+["最小對立對（二）長短 a、圓唇、n/l", "角、國", "gok3 / gwok3", "g vs gw"],
+["最小對立對（二）長短 a、圓唇、n/l", "書、詩", "syu1 / si1", "yu 嘴圓，i 嘴扁"],
+["最小對立對（二）長短 a、圓唇、n/l", "魚、兒", "jyu4 / ji4", "yu 嘴圓，i 嘴扁"],
+["最小對立對（二）長短 a、圓唇、n/l", "你、李", "nei5 / lei5", "n vs l：標準要分清，不少人混讀"],
+["最小對立對（三）入聲、送氣、z c s", "一、因", "jat1 / jan1", "-t 短促收尾 vs -n 鼻音收尾"],
+["最小對立對（三）入聲、送氣、z c s", "日、人", "jat6 / jan4", "-t vs -n"],
+["最小對立對（三）入聲、送氣、z c s", "食、星", "sik6 / sing1", "-k vs -ng"],
+["最小對立對（三）入聲、送氣、z c s", "十、森", "sap6 / sam1", "-p 閉口收尾 vs -m 閉口鼻音"],
+["最小對立對（三）入聲、送氣、z c s", "爸、怕", "baa1 / paa3", "b 不送氣 vs p 送氣"],
+["最小對立對（三）入聲、送氣、z c s", "打、他", "daa2 / taa1", "d 不送氣 vs t 送氣"],
+["最小對立對（三）入聲、送氣、z c s", "家、卡", "gaa1 / kaa1", "g 不送氣 vs k 送氣"],
+["最小對立對（三）入聲、送氣、z c s", "知、痴、詩", "zi1 / ci1 / si1", "z、c、s 三個聲母"],
+["最小對立對（三）入聲、送氣、z c s", "左、錯、梳", "zo2 / co3 / so1", "z、c、s 三個聲母"],
+["普粵對照（一）常用字詞", "食飯", "sik6 faan6", "普通話：吃飯。「吃」粵語說「食」"],
+["普粵對照（一）常用字詞", "飲水", "jam2 seoi2", "普通話：喝水。「喝」粵語說「飲」"],
+["普粵對照（一）常用字詞", "睇書", "tai2 syu1", "普通話：看書。「看」粵語說「睇」"],
+["普粵對照（一）常用字詞", "睇戲", "tai2 hei3", "普通話：看電影。電影口語常說「戲」"],
+["普粵對照（一）常用字詞", "返屋企", "faan1 uk1 kei2", "普通話：回家。「家」口語說「屋企」"],
+["普粵對照（一）常用字詞", "聽日見", "ting1 jat6 gin3", "普通話：明天見。「明天」粵語說「聽日」"],
+["普粵對照（一）常用字詞", "好靚", "hou2 leng3", "普通話：很漂亮。「漂亮」粵語說「靚」"],
+["普粵對照（一）常用字詞", "攞嘢", "lo2 je5", "普通話：拿東西。「拿」說「攞」，「東西」說「嘢」"],
+["普粵對照（一）常用字詞", "唔係", "m4 hai6", "普通話：不是。「不」粵語說「唔」，「是」說「係」"],
+["普粵對照（一）常用字詞", "畀你", "bei2 nei5", "普通話：給你。「給」粵語說「畀」"],
+["普粵對照（一）常用字詞", "多啲", "do1 di1", "普通話：多一點。「點」說「啲」"],
+["普粵對照（一）常用字詞", "食晒", "sik6 saai3", "普通話：吃光了。「晒」表示全部、完"],
+["普粵對照（二）語法與句型", "你食先", "nei5 sik6 sin1", "普通話：你先吃。「先」放在動詞後面"],
+["普粵對照（二）語法與句型", "行先", "haang4 sin1", "普通話：先走。「先」放在動詞後面"],
+["普粵對照（二）語法與句型", "我食咗飯", "ngo5 sik6 zo2 faan6", "普通話：我吃了飯。「了」說「咗」，放在動詞後"],
+["普粵對照（二）語法與句型", "我睇緊書", "ngo5 tai2 gan2 syu1", "普通話：我正在看書。「正在」說動詞後加「緊」"],
+["普粵對照（二）語法與句型", "我高過你", "ngo5 gou1 gwo3 nei5", "普通話：我比你高。比較句用「形容詞＋過」"],
+["普粵對照（二）語法與句型", "係咪", "hai6 mai6", "普通話：是不是。常放在句中或句末發問"],
+["普粵對照（二）語法與句型", "得唔得", "dak1 m4 dak1", "普通話：行不行。「行不行」＝「得唔得」"],
+["普粵對照（二）語法與句型", "俾我睇下", "bei2 ngo5 tai2 haa5", "普通話：讓我看看。「下」表示一下、看看"],
+["檢測：1 分鐘自我介紹", "大家好，我叫……", "daai6 gaa1 hou2, ngo5 giu3 ...", "開場：向大家問好並說名字，把「……」換成你的名字"],
+["檢測：1 分鐘自我介紹", "我係……人", "ngo5 hai6 ... jan4", "從哪裡來，例如「內地人」「廣州人」"],
+["檢測：1 分鐘自我介紹", "我住喺……", "ngo5 zyu6 hai2 ...", "住在哪個區"],
+["檢測：1 分鐘自我介紹", "我喺……做嘢", "ngo5 hai2 ... zou6 je5", "工作：在哪裡、做什麼行業"],
+["檢測：1 分鐘自我介紹", "我朝早……點返工", "ngo5 ziu1 zou2 ... dim2 faan1 gung1", "早上幾點上班，把「……」換成數字"],
+["檢測：1 分鐘自我介紹", "我今日好忙", "ngo5 gam1 jat6 hou2 mong4", "今天忙不忙，不忙說「我今日唔係好忙」"],
+["檢測：1 分鐘自我介紹", "我識少少廣東話，仲喺度學", "ngo5 sik1 siu2 siu2 gwong2 dung1 waa2, zung6 hai2 dou6 hok6", "我會一點廣東話，還在學"],
+["檢測：1 分鐘自我介紹", "多謝大家", "do1 ze6 daai6 gaa1", "結尾：謝謝大家"],
+["檢測：1 分鐘自我介紹", "完整自我介紹", "daai6 gaa1 hou2, ngo5 giu3 ... ngo5 hai6 ... jan4, ji4 gaa1 zyu6 hai2 ... ngo5 hai2 ... zou6 je5, ngo5 ziu1 zou2 ... dim2 faan1 gung1, ngo5 gam1 jat6 hou2 mong4, ngo5 sik1 siu2 siu2 gwong2 dung1 waa2, zung6 hai2 dou6 hok6, do1 ze6 daai6 gaa1", "把上面幾句連起來，換成自己的信息，錄一段 1 分鐘內的錄音，回聽並請老師糾正"],
+["見面", "好耐冇見，你最近點呀？", "hou2 noi6 mou5 gin3, nei5 zeoi3 gan6 dim2 aa3", "【你說】老朋友見面的寒暄"],
+["見面", "都幾好，你呢？", "dou1 gei2 hou2, nei5 ne1", "【你答】還不錯，你呢？"],
+["見面", "馬馬虎虎", "maa1 maa1 fu1 fu1", "【你答】還可以、一般般"],
+["見面", "咁啱嘅！", "gam3 ngaam1 ge3", "這麼巧！"],
+["見面", "呢位係我朋友", "ni1 wai2 hai6 ngo5 pang4 jau5", "【你說】介紹朋友。「位」是人的量詞"],
+["見面", "你好，我叫……，好高興認識你", "nei5 hou2, ngo5 giu3 ..., hou2 gou1 hing3 jing6 sik1 nei5", "【你說】初次見面"],
+["見面", "幸會幸會", "hang6 wui6 hang6 wui6", "【對方說】初次見面的客氣話"],
+["見面", "請問你貴姓？", "cing2 man6 nei5 gwai3 sing3", "【你問】客氣地問姓氏"],
+["見面", "你喺邊度做嘢㗎？", "nei5 hai2 bin1 dou6 zou6 je5 gaa3", "【你問】你在哪裡工作？"],
+["見面", "得閒飲茶", "dak1 haan4 jam2 caa4", "有空一起喝茶，常用的客套話"],
+["見面", "我哋改日再約", "ngo5 dei6 goi2 jat6 zoi3 joek3", "我們改天再約"],
+["見面", "拜拜，聽日見", "baai1 baai3, ting1 jat6 gin3", "道別"],
+["打電話", "喂？", "wai2", "接電話時說"],
+["打電話", "請問邊位搵？", "cing2 man6 bin1 wai2 wan2", "【對方問】請問找哪位？"],
+["打電話", "唔該，我想搵……聽電話", "m4 goi1, ngo5 soeng2 wan2 ... teng1 din6 waa2", "【你說】請找……接電話"],
+["打電話", "佢而家唔喺度", "keoi5 ji4 gaa1 m4 hai2 dou6", "【對方說】他現在不在"],
+["打電話", "唔該你等一等", "m4 goi1 nei5 dang2 jat1 dang2", "【對方說】請你等一等"],
+["打電話", "可唔可以留個口訊？", "ho2 m4 ho2 ji5 lau4 go3 hau2 seon3", "【你問】可以留個口信嗎？"],
+["打電話", "我遲啲再打畀你", "ngo5 ci4 di1 zoi3 daa2 bei2 nei5", "我晚點再打給你"],
+["打電話", "打錯咗", "daa2 co3 zo2", "打錯了"],
+["打電話", "聽唔清楚，唔該再講一次", "teng1 m4 cing1 co2, m4 goi1 zoi3 gong2 jat1 ci3", "【你說】聽不清楚，請再說一次"],
+["打電話", "條線唔好，聽唔到", "tiu4 sin3 m4 hou2, teng1 m4 dou2", "信號不好，聽不到"],
+["打電話", "你嘅電話號碼係幾多號？", "nei5 ge3 din6 waa2 hou6 maa5 hai6 gei2 do1 hou6", "【你問】你的電話號碼是多少？"],
+["打電話", "多謝，拜拜", "do1 ze6, baai1 baai3", "結束通話"],
+["購物", "我隨便睇睇", "ngo5 ceoi4 bin2 tai2 tai2", "【你說】店員問時的回答：我隨便看看"],
+["購物", "呢個幾多錢？", "ni1 go3 gei2 do1 cin2", "【你問】這個多少錢？"],
+["購物", "有冇細碼？", "jau5 mou5 sai3 maa5", "【你問】有沒有小號？"],
+["購物", "我可以試吓嗎？", "ngo5 ho2 ji5 si3 haa5 maa3", "【你問】我可以試一下嗎？"],
+["購物", "貴咗啲，平啲得唔得？", "gwai3 zo2 di1, peng4 di1 dak1 m4 dak1", "【你說】貴了點，便宜一點行不行？"],
+["購物", "可唔可以打折？", "ho2 m4 ho2 ji5 daa2 zit3", "【你問】可以打折嗎？"],
+["購物", "我要呢個，唔該", "ngo5 jiu3 ni1 go3, m4 goi1", "【你說】我要這個"],
+["購物", "袋要唔要？", "doi2 jiu3 m4 jiu3", "【對方問】要不要袋子？"],
+["購物", "俾現金定係八達通？", "bei2 jin6 gam1 ding6 hai6 baat3 daat6 tung1", "【對方問】付現金還是八達通？"],
+["購物", "可以用信用卡嗎？", "ho2 ji5 jung6 seon3 jung6 kaat1 maa3", "【你問】可以用信用卡嗎？"],
+["購物", "唔該，收據", "m4 goi1, sau1 geoi3", "【你說】麻煩給我收據"],
+["購物", "呢件有冇其他顏色？", "ni1 gin6 jau5 mou5 kei4 taa1 ngaan4 sik1", "【你問】這件有沒有其他顏色？"],
+["購物", "我考慮吓", "ngo5 haau2 leoi6 haa5", "【你說】我考慮一下"],
+["購物", "唔使喇，多謝", "m4 sai2 laa3, do1 ze6", "【你說】不用了，謝謝"],
+["用餐（一）茶餐廳點餐", "幾位？", "gei2 wai2", "【對方問】幾位？"],
+["用餐（一）茶餐廳點餐", "兩位", "loeng5 wai2", "【你答】兩位"],
+["用餐（一）茶餐廳點餐", "唔該，餐牌", "m4 goi1, caan1 paai2", "【你說】麻煩給我餐牌"],
+["用餐（一）茶餐廳點餐", "我想要一個……餐", "ngo5 soeng2 jiu3 jat1 go3 ... caan1", "【你說】我想要一個……餐"],
+["用餐（一）茶餐廳點餐", "要咩飲品？", "jiu3 me1 jam2 ban2", "【對方問】要什麼飲品？"],
+["用餐（一）茶餐廳點餐", "熱奶茶，少甜", "jit6 naai5 caa4, siu2 tim4", "【你答】熱奶茶，少糖"],
+["用餐（一）茶餐廳點餐", "凍檸茶，走冰", "dung3 ning2 caa4, zau2 bing1", "【你答】冰檸茶，去冰"],
+["用餐（一）茶餐廳點餐", "堂食定外賣？", "tong4 sik6 ding6 ngoi6 maai6", "【對方問】堂食還是外賣？"],
+["用餐（一）茶餐廳點餐", "外賣，唔該", "ngoi6 maai6, m4 goi1", "【你答】外賣"],
+["用餐（一）茶餐廳點餐", "乜嘢好食？", "mat1 je5 hou2 sik6", "【你問】什麼好吃？"],
+["用餐（一）茶餐廳點餐", "呢個辣唔辣？", "ni1 go3 laat6 m4 laat6", "【你問】這個辣不辣？"],
+["用餐（一）茶餐廳點餐", "唔好落葱", "m4 hou2 lok6 cung1", "【你說】不要放蔥"],
+["用餐（一）茶餐廳點餐", "唔該，要杯水", "m4 goi1, jiu3 bui1 seoi2", "【你說】麻煩要一杯水"],
+["用餐（一）茶餐廳點餐", "唔該，埋單", "m4 goi1, maai4 daan1", "【你說】結賬，在港餐廳最常用的一句"],
+["用餐（二）茶餐廳術語", "常餐", "soeng4 caan1", "普通話：套餐，通常含主食和飲品"],
+["用餐（二）茶餐廳術語", "餐蛋麵", "caan1 daan2 min6", "午餐肉煎蛋麵"],
+["用餐（二）茶餐廳術語", "公仔麵", "gung1 zai2 min6", "即食麵"],
+["用餐（二）茶餐廳術語", "菠蘿油", "bo1 lo4 jau4", "菠蘿包夾牛油，經典港式早餐"],
+["用餐（二）茶餐廳術語", "西多士", "sai1 do1 si2", "港式法式吐司"],
+["用餐（二）茶餐廳術語", "蛋撻", "daan6 taat1", "蛋塔"],
+["用餐（二）茶餐廳術語", "吞拿魚三文治", "tan1 naa4 jyu2 saam1 man4 zi6", "鮪魚三明治"],
+["用餐（二）茶餐廳術語", "午餐肉", "ng5 caan1 juk6", "罐頭午餐肉"],
+["用餐（二）茶餐廳術語", "鴛鴦", "jyun1 joeng1", "咖啡加奶茶混合的飲品"],
+["用餐（二）茶餐廳術語", "檸樂", "ning2 lok6", "檸檬可樂"],
+["用餐（二）茶餐廳術語", "熱檸水", "jit6 ning2 seoi2", "熱檸檬水"],
+["用餐（二）茶餐廳術語", "走甜", "zau2 tim4", "不加糖，「走」表示去掉"],
+["問路", "請問……點行？", "cing2 man6 ... dim2 haang4", "【你問】請問……怎麼走？"],
+["問路", "請問地鐵站喺邊度？", "cing2 man6 dei6 tit3 zaam6 hai2 bin1 dou6", "【你問】請問地鐵站在哪裡？"],
+["問路", "近唔近？", "gan6 m4 gan6", "【你問】近不近？"],
+["問路", "行路要幾耐？", "haang4 lou6 jiu3 gei2 noi6", "【你問】走路要多久？"],
+["問路", "直行，喺第二個路口轉左", "zik6 haang4, hai2 dai6 ji6 go3 lou6 hau2 zyun3 zo2", "【對方說】直走，在第二個路口左轉"],
+["問路", "過咗條橋就係", "gwo3 zo2 tiu4 kiu4 zau6 hai6", "【對方說】過了橋就是"],
+["問路", "就喺前面", "zau6 hai2 cin4 min6", "【對方說】就在前面"],
+["問路", "喺……對面", "hai2 ... deoi3 min6", "【對方說】在……對面"],
+["問路", "喺……隔籬", "hai2 ... gaak3 lei4", "【對方說】在……旁邊"],
+["問路", "我唔識路", "ngo5 m4 sik1 lou6", "【你說】我不認識路"],
+["問路", "搭巴士去得唔得？", "daap3 baa1 si2 heoi3 dak1 m4 dak1", "【你問】搭巴士去行不行？"],
+["問路", "唔該晒", "m4 goi1 saai3", "【你說】非常感謝，「晒」表示全部、很"],
+["出行（地鐵、巴士、的士）", "喺邊個站轉車？", "hai2 bin1 go3 zaam6 zyun3 ce1", "【你問】在哪個站轉車？"],
+["出行（地鐵、巴士、的士）", "呢班車去唔去……？", "ni1 baan1 ce1 heoi3 m4 heoi3 ...", "【你問】這班車去不去……？"],
+["出行（地鐵、巴士、的士）", "下一站係……", "haa6 jat1 zaam6 hai6 ...", "【廣播】下一站是……"],
+["出行（地鐵、巴士、的士）", "唔該，八達通增值", "m4 goi1, baat3 daat6 tung1 zang1 zik6", "【你說】麻煩，八達通增值"],
+["出行（地鐵、巴士、的士）", "月台", "jyut6 toi4", "月台"],
+["出行（地鐵、巴士、的士）", "出口", "ceot1 hau2", "出口"],
+["出行（地鐵、巴士、的士）", "呢架巴士去唔去……？", "ni1 gaa3 baa1 si2 heoi3 m4 heoi3 ...", "【你問】這輛巴士去不去……？"],
+["出行（地鐵、巴士、的士）", "唔該，有落！", "m4 goi1, jau5 lok6", "【你說】小巴上叫司機停車：我要在這裡下車"],
+["出行（地鐵、巴士、的士）", "前面有落", "cin4 min6 jau5 lok6", "【你說】小巴上叫司機停車：我要在前面下車"],
+["出行（地鐵、巴士、的士）", "唔該，去……", "m4 goi1, heoi3 ...", "【你說】的士上：麻煩，去……"],
+["出行（地鐵、巴士、的士）", "唔該，去機場", "m4 goi1, heoi3 gei1 coeng4", "【你說】麻煩，去機場"],
+["出行（地鐵、巴士、的士）", "唔該，打錶", "m4 goi1, daa2 biu1", "【你說】麻煩，按錶計費"],
+["出行（地鐵、巴士、的士）", "喺呢度停，唔該", "hai2 ni1 dou6 ting4, m4 goi1", "【你說】在這裡停，謝謝"],
+["天氣", "今日天氣好好", "gam1 jat6 tin1 hei3 hou2 hou2", "今天天氣很好"],
+["天氣", "好熱", "hou2 jit6", "很熱"],
+["天氣", "好凍", "hou2 dung3", "很冷"],
+["天氣", "好涼", "hou2 loeng4", "很涼爽"],
+["天氣", "好曬", "hou2 saai3", "太陽很曬"],
+["天氣", "好潮濕", "hou2 ciu4 sap1", "很潮濕"],
+["天氣", "好悶", "hou2 mun6", "很悶"],
+["天氣", "落雨", "lok6 jyu5", "下雨"],
+["天氣", "起風", "hei2 fung1", "颳風"],
+["天氣", "打風", "daa2 fung1", "颱風來了"],
+["天氣", "掛三號風球", "gwaa3 saam1 hou6 fung1 kau4", "掛三號風球（颱風信號）"],
+["天氣", "聽日會唔會落雨？", "ting1 jat6 wui5 m4 wui5 lok6 jyu5", "明天會不會下雨？"],
+["天氣", "記得帶遮", "gei3 dak1 daai3 ze1", "記得帶傘"],
+["場景 A 綜合", "唔該，請問最近嘅地鐵站點行？", "m4 goi1, cing2 man6 zeoi3 gan6 ge3 dei6 tit3 zaam6 dim2 haang4", "問路"],
+["場景 A 綜合", "我想買兩個，幾多錢？", "ngo5 soeng2 maai5 loeng5 go3, gei2 do1 cin2", "購物"],
+["場景 A 綜合", "呢件有冇細碼？我可以試吓嗎？", "ni1 gin6 jau5 mou5 sai3 maa5? ngo5 ho2 ji5 si3 haa5 maa3", "購物"],
+["場景 A 綜合", "今日好熱，我想飲杯凍檸茶", "gam1 jat6 hou2 jit6, ngo5 soeng2 jam2 bui1 dung3 ning2 caa4", "天氣＋點餐"],
+["場景 A 綜合", "唔該，兩位，堂食", "m4 goi1, loeng5 wai2, tong4 sik6", "用餐"],
+["場景 A 綜合", "唔該，埋單，俾八達通", "m4 goi1, maai4 daan1, bei2 baat3 daat6 tung1", "用餐付錢"],
+["場景 A 綜合", "喂，我而家喺地鐵站，十分鐘後到", "wai2, ngo5 ji4 gaa1 hai2 dei6 tit3 zaam6, sap6 fan1 zung1 hau6 dou3", "打電話"],
+["場景 A 綜合", "好耐冇見，聽日一齊食飯好唔好？", "hou2 noi6 mou5 gin3, ting1 jat6 jat1 cai4 sik6 faan6 hou2 m4 hou2", "見面約飯"],
+["場景 A 綜合", "唔該，我想去機場，可以打錶嗎？", "m4 goi1, ngo5 soeng2 heoi3 gei1 coeng4, ho2 ji5 daa2 biu1 maa3", "的士"],
+["場景 A 綜合", "聽日會唔會落雨？記得帶遮", "ting1 jat6 wui5 m4 wui5 lok6 jyu5? gei3 dak1 daai3 ze1", "天氣"],
+["場景 A 綜合", "我唔識路，可唔可以講慢啲？", "ngo5 m4 sik1 lou6, ho2 m4 ho2 ji5 gong2 maan6 di1", "問路時請對方說慢點"],
+["場景 A 綜合", "多謝，我哋改日再約", "do1 ze6, ngo5 dei6 goi2 jat6 zoi3 joek3", "道別"],
+["檢測：購物全流程", "歡迎光臨，有咩幫到你？", "fun1 jing4 gwong1 lam4, jau5 me1 bong1 dou2 nei5", "【店員】你要用「我隨便睇睇」或說出想買什麼來回答"],
+["檢測：購物全流程", "三百八十蚊", "saam1 baak3 baat3 sap6 man1", "【店員】報價，你要聽懂數字"],
+["檢測：購物全流程", "呢個有啲貴，平啲得唔得？", "ni1 go3 jau5 di1 gwai3, peng4 di1 dak1 m4 dak1", "【你說】講價"],
+["檢測：購物全流程", "可以打九折", "ho2 ji5 daa2 gau2 zit3", "【店員】九折，也就是減一成"],
+["檢測：購物全流程", "好，我要呢個。我可以試吓嗎？", "hou2, ngo5 jiu3 ni1 go3. ngo5 ho2 ji5 si3 haa5 maa3", "【你說】決定購買並要求試穿"],
+["檢測：購物全流程", "袋要唔要？", "doi2 jiu3 m4 jiu3", "【店員】你要回答要或不要"],
+["檢測：購物全流程", "唔使喇，多謝", "m4 sai2 laa3, do1 ze6", "【你答】不用袋子"],
+["檢測：購物全流程", "現金定八達通？", "jin6 gam1 ding6 baat3 daat6 tung1", "【店員】問付款方式"],
+["檢測：購物全流程", "八達通，唔該", "baat3 daat6 tung1, m4 goi1", "【你答】用八達通付款"],
+["檢測：購物全流程", "多謝，下次再嚟", "do1 ze6, haa6 ci3 zoi3 lai4", "【店員】送客"],
+["檢測：購物全流程", "唔該，拜拜", "m4 goi1, baai1 baai3", "【你說】道別"],
+["求醫", "我唔舒服", "ngo5 m4 syu1 fuk6", "【你說】我不舒服"],
+["求醫", "我想睇醫生", "ngo5 soeng2 tai2 ji1 sang1", "【你說】我想看醫生"],
+["求醫", "我想預約", "ngo5 soeng2 jyu6 joek3", "【你說】我想預約"],
+["求醫", "你邊度唔舒服？", "nei5 bin1 dou6 m4 syu1 fuk6", "【醫生問】你哪裡不舒服？"],
+["求醫", "我頭痛", "ngo5 tau4 tung3", "【你說】我頭痛"],
+["求醫", "我肚痛", "ngo5 tou5 tung3", "【你說】我肚子痛"],
+["求醫", "我喉嚨痛", "ngo5 hau4 lung4 tung3", "【你說】我喉嚨痛"],
+["求醫", "我發燒", "ngo5 faat3 siu1", "【你說】我發燒"],
+["求醫", "我傷風", "ngo5 soeng1 fung1", "【你說】我感冒了（香港常說「傷風」）"],
+["求醫", "我咳嗽", "ngo5 kat1 sau3", "【你說】我咳嗽"],
+["求醫", "我流鼻水", "ngo5 lau4 bei6 seoi2", "【你說】我流鼻水"],
+["求醫", "我頭暈", "ngo5 tau4 wan4", "【你說】我頭暈"],
+["求醫", "痛咗幾耐？", "tung3 zo2 gei2 noi6", "【醫生問】痛了多久？"],
+["求醫", "由琴日開始", "jau4 kam4 jat6 hoi1 ci2", "【你答】從昨天開始"],
+["求醫", "你對咩藥敏感？", "nei5 deoi3 me1 joek6 man5 gam2", "【醫生問】你對什麼藥過敏？"],
+["求醫", "張開口", "zoeng1 hoi1 hau2", "【醫生說】張開嘴"],
+["求醫", "深呼吸", "sam1 fu1 kap1", "【醫生說】深呼吸"],
+["求醫", "開啲藥畀你，一日食三次，飯後食", "hoi1 di1 joek6 bei2 nei5, jat1 jat6 sik6 saam1 ci3, faan6 hau6 sik6", "【醫生說】開點藥給你，一天吃三次，飯後吃"],
+["求醫", "唔該，我想要張病假紙", "m4 goi1, ngo5 soeng2 jiu3 zoeng1 beng6 gaa3 zi2", "【你說】麻煩，我想要一張病假條"],
+["求醫", "我要去急症室", "ngo5 jiu3 heoi3 gap1 zing3 sat1", "【你說】我要去急症室（醫院的急診部）"],
+["理髮", "我想飛髮", "ngo5 soeng2 fei1 faat3", "【你說】我想剪頭髮（香港口語常說「飛髮」）"],
+["理髮", "我想剪短啲", "ngo5 soeng2 zin2 dyun2 di1", "【你說】我想剪短一點"],
+["理髮", "剪短少少", "zin2 dyun2 siu2 siu2", "【你說】剪短一點點"],
+["理髮", "唔好剪太短", "m4 hou2 zin2 taai3 dyun2", "【你說】不要剪太短"],
+["理髮", "修一修", "sau1 jat1 sau1", "【你說】修一修就好"],
+["理髮", "兩邊剪短啲，頂部留長啲", "loeng5 bin1 zin2 dyun2 di1, ding2 bou6 lau4 coeng4 di1", "【你說】兩邊剪短一點，頭頂留長一點"],
+["理髮", "我想剪成呢個樣", "ngo5 soeng2 zin2 sing4 ni1 go3 joeng2", "【你說】我想剪成這個樣子（可配合手機照片）"],
+["理髮", "要洗頭嗎？", "jiu3 sai2 tau4 maa3", "【理髮師問】要洗頭嗎？"],
+["理髮", "唔該，洗頭", "m4 goi1, sai2 tau4", "【你答】麻煩，洗頭"],
+["理髮", "吹乾", "ceoi1 gon1", "吹乾頭髮"],
+["理髮", "劉海要唔要剪？", "lau4 hoi2 jiu3 m4 jiu3 zin2", "【理髮師問】瀏海要不要剪？"],
+["理髮", "夠唔夠短？", "gau3 m4 gau3 dyun2", "【理髮師問】夠不夠短？"],
+["理髮", "再短少少", "zoi3 dyun2 siu2 siu2", "【你說】再短一點點"],
+["理髮", "我想染髮", "ngo5 soeng2 jim5 faat3", "【你說】我想染髮"],
+["理髮", "剪髮幾多錢？", "zin2 faat3 gei2 do1 cin2", "【你問】剪髮多少錢？"],
+["辦事（銀行、電話卡、速遞）", "我想開戶口", "ngo5 soeng2 hoi1 wu6 hau2", "【銀行】我想開戶"],
+["辦事（銀行、電話卡、速遞）", "我想存錢", "ngo5 soeng2 cyun4 cin2", "【銀行】我想存錢"],
+["辦事（銀行、電話卡、速遞）", "我想提款", "ngo5 soeng2 tai4 fun2", "【銀行】我想取款"],
+["辦事（銀行、電話卡、速遞）", "我想轉賬", "ngo5 soeng2 zyun2 zoeng3", "【銀行】我想轉賬"],
+["辦事（銀行、電話卡、速遞）", "請出示身份證", "cing2 ceot1 si6 san1 fan2 zing3", "【職員說】請出示身份證"],
+["辦事（銀行、電話卡、速遞）", "請填呢張表格", "cing2 tin4 ni1 zoeng1 biu2 gaak3", "【職員說】請填這張表格"],
+["辦事（銀行、電話卡、速遞）", "請輸入密碼", "cing2 syu1 jap6 mat6 maa5", "【職員說】請輸入密碼"],
+["辦事（銀行、電話卡、速遞）", "我想買張電話卡", "ngo5 soeng2 maai5 zoeng1 din6 waa2 kaat1", "【電話卡】我想買一張電話卡"],
+["辦事（銀行、電話卡、速遞）", "有冇數據？", "jau5 mou5 sou3 geoi3", "【電話卡】有沒有數據流量？"],
+["辦事（銀行、電話卡、速遞）", "可以用幾耐？", "ho2 ji5 jung6 gei2 noi6", "【電話卡】可以用多久？"],
+["辦事（銀行、電話卡、速遞）", "我想充值", "ngo5 soeng2 cung1 zik6", "【電話卡】我想充值"],
+["辦事（銀行、電話卡、速遞）", "我想寄包裹", "ngo5 soeng2 gei3 baau1 gwo2", "【速遞】我想寄包裹"],
+["辦事（銀行、電話卡、速遞）", "寄去內地，幾時會到？", "gei3 heoi3 noi6 dei6, gei2 si4 wui5 dou3", "【速遞】寄去內地，什麼時候會到？"],
+["辦事（銀行、電話卡、速遞）", "我嚟攞包裹", "ngo5 lai4 lo2 baau1 gwo2", "【速遞】我來取包裹"],
+["辦事（銀行、電話卡、速遞）", "唔該，簽個名", "m4 goi1, cim1 go3 meng2", "【速遞員說】麻煩，簽個名"],
+["租屋與住宿", "我想租屋", "ngo5 soeng2 zou1 uk1", "【租屋】我想租房子"],
+["租屋與住宿", "我想睇樓", "ngo5 soeng2 tai2 lau2", "【租屋】我想看房（「睇樓」＝去看房子）"],
+["租屋與住宿", "一個月租幾多錢？", "jat1 go3 jyut6 zou1 gei2 do1 cin2", "【租屋】一個月租金多少？"],
+["租屋與住宿", "包唔包水電費？", "baau1 m4 baau1 seoi2 din6 fai3", "【租屋】包不包水電費？"],
+["租屋與住宿", "要俾幾多按金？", "jiu3 bei2 gei2 do1 on3 gam1", "【租屋】要付多少押金？"],
+["租屋與住宿", "租屋通常要俾兩個月按金", "zou1 uk1 tung1 soeng4 jiu3 bei2 loeng5 go3 jyut6 on3 gam1", "租房通常要付兩個月押金"],
+["租屋與住宿", "我每個月頭都要交租", "ngo5 mui5 go3 jyut6 tau4 dou1 jiu3 gaau1 zou1", "我每個月月初都要交房租"],
+["租屋與住宿", "租約幾耐？", "zou1 joek3 gei2 noi6", "【租屋】租約多長？"],
+["租屋與住宿", "有冇傢俬？", "jau5 mou5 gaa1 si1", "【租屋】有沒有傢俱？"],
+["租屋與住宿", "幾時可以入住？", "gei2 si4 ho2 ji5 jap6 zyu6", "【租屋】什麼時候可以入住？"],
+["租屋與住宿", "近唔近地鐵站？", "gan6 m4 gan6 dei6 tit3 zaam6", "【租屋】離地鐵站近不近？"],
+["租屋與住宿", "我想訂房", "ngo5 soeng2 deng6 fong2", "【住宿】我想訂房"],
+["租屋與住宿", "住幾晚？", "zyu6 gei2 maan5", "【住宿】住幾晚？"],
+["租屋與住宿", "我住兩晚", "ngo5 zyu6 loeng5 maan5", "【住宿】我住兩晚"],
+["租屋與住宿", "幾點退房？", "gei2 dim2 teoi3 fong2", "【住宿】幾點退房？"],
+["租屋與住宿", "唔該，要多條毛巾", "m4 goi1, jiu3 do1 tiu4 mou4 gan1", "【住宿】麻煩，多要一條毛巾"],
+["租屋與住宿", "冷氣壞咗", "laang5 hei3 waai6 zo2", "【住宿】冷氣壞了"],
+["緊急求助", "救命！", "gau3 meng6", "救命！"],
+["緊急求助", "唔該幫我！", "m4 goi1 bong1 ngo5", "【你說】請幫幫我！"],
+["緊急求助", "打九九九", "daa2 gau2 gau2 gau2", "打 999（香港緊急求助電話；訊號不好的地方也可打 112）"],
+["緊急求助", "請叫救護車", "cing2 giu3 gau3 wu6 ce1", "【你說】請叫救護車"],
+["緊急求助", "我要報警", "ngo5 jiu3 bou3 ging2", "【你說】我要報警"],
+["緊急求助", "有火警", "jau5 fo2 ging2", "【你說】有火警"],
+["緊急求助", "有人暈咗", "jau5 jan4 wan4 zo2", "【你說】有人暈倒了"],
+["緊急求助", "呢度有人受傷", "ni1 dou6 jau5 jan4 sau6 soeng1", "【你說】這裡有人受傷"],
+["緊急求助", "我唔見咗銀包", "ngo5 m4 gin3 zo2 ngan4 baau1", "【你說】我錢包不見了"],
+["緊急求助", "我唔見咗護照", "ngo5 m4 gin3 zo2 wu6 ziu3", "【你說】我護照不見了"],
+["緊急求助", "我個袋俾人偷咗", "ngo5 go3 doi2 bei2 jan4 tau1 zo2", "【你說】我的包被人偷了"],
+["緊急求助", "我迷路", "ngo5 mai4 lou6", "【你說】我迷路了"],
+["緊急求助", "我喺……，請快啲嚟", "ngo5 hai2 ..., cing2 faai3 di1 lai4", "【你說】我在……，請快點來"],
+["場景 B 綜合", "唔該，我發燒兩日，想睇醫生", "m4 goi1, ngo5 faat3 siu1 loeng5 jat6, soeng2 tai2 ji1 sang1", "求醫"],
+["場景 B 綜合", "我對花粉敏感", "ngo5 deoi3 faa1 fan2 man5 gam2", "求醫：說明過敏"],
+["場景 B 綜合", "我想剪短啲，兩邊修一修", "ngo5 soeng2 zin2 dyun2 di1, loeng5 bin1 sau1 jat1 sau1", "理髮"],
+["場景 B 綜合", "我想開戶口，我帶咗身份證", "ngo5 soeng2 hoi1 wu6 hau2, ngo5 daai3 zo2 san1 fan2 zing3", "銀行"],
+["場景 B 綜合", "我想買張電話卡，有冇數據？", "ngo5 soeng2 maai5 zoeng1 din6 waa2 kaat1, jau5 mou5 sou3 geoi3", "電話卡"],
+["場景 B 綜合", "我想寄包裹去內地，幾時會到？", "ngo5 soeng2 gei3 baau1 gwo2 heoi3 noi6 dei6, gei2 si4 wui5 dou3", "速遞"],
+["場景 B 綜合", "我想租屋，一個月租金幾多？", "ngo5 soeng2 zou1 uk1, jat1 go3 jyut6 zou1 gam1 gei2 do1", "租屋"],
+["場景 B 綜合", "我想訂兩晚房，幾點退房？", "ngo5 soeng2 deng6 loeng5 maan5 fong2, gei2 dim2 teoi3 fong2", "住宿"],
+["場景 B 綜合", "我唔見咗銀包，我要報警", "ngo5 m4 gin3 zo2 ngan4 baau1, ngo5 jiu3 bou3 ging2", "緊急求助"],
+["場景 B 綜合", "有人暈咗，請叫救護車", "jau5 jan4 wan4 zo2, cing2 giu3 gau3 wu6 ce1", "緊急求助"],
+["檢測：求醫角色扮演", "你好，邊度唔舒服呀？", "nei5 hou2, bin1 dou6 m4 syu1 fuk6 aa3", "【醫生】開場，你要說出症狀"],
+["檢測：求醫角色扮演", "我發燒，仲有啲頭痛", "ngo5 faat3 siu1, zung6 jau5 di1 tau4 tung3", "【你說】我發燒，還有點頭痛"],
+["檢測：求醫角色扮演", "痛咗幾耐？", "tung3 zo2 gei2 noi6", "【醫生】痛了多久？"],
+["檢測：求醫角色扮演", "由琴日開始", "jau4 kam4 jat6 hoi1 ci2", "【你答】從昨天開始"],
+["檢測：求醫角色扮演", "有冇咳嗽、流鼻水？", "jau5 mou5 kat1 sau3, lau4 bei6 seoi2", "【醫生】有沒有咳嗽、流鼻水？"],
+["檢測：求醫角色扮演", "有少少咳嗽，冇流鼻水", "jau5 siu2 siu2 kat1 sau3, mou5 lau4 bei6 seoi2", "【你答】有一點咳嗽，沒有流鼻水"],
+["檢測：求醫角色扮演", "你對咩藥敏感？", "nei5 deoi3 me1 joek6 man5 gam2", "【醫生】你對什麼藥過敏？"],
+["檢測：求醫角色扮演", "我冇藥物敏感", "ngo5 mou5 joek6 mat6 man5 gam2", "【你答】我沒有藥物過敏"],
+["檢測：求醫角色扮演", "張開口，我睇下", "zoeng1 hoi1 hau2, ngo5 tai2 haa5", "【醫生】張開嘴，我看看"],
+["檢測：求醫角色扮演", "開啲藥畀你，一日食三次，飯後食", "hoi1 di1 joek6 bei2 nei5, jat1 jat6 sik6 saam1 ci3, faan6 hau6 sik6", "【醫生】開藥並交代怎麼吃"],
+["檢測：求醫角色扮演", "唔該，我想要張病假紙", "m4 goi1, ngo5 soeng2 jiu3 zoeng1 beng6 gaa3 zi2", "【你說】請醫生開病假條"],
+["檢測：求醫角色扮演", "多啲休息，多啲飲水", "do1 di1 jau1 sik1, do1 di1 jam2 seoi2", "【醫生】多休息，多喝水"],
+["檢測：求醫角色扮演", "唔該晒，醫生", "m4 goi1 saai3, ji1 sang1", "【你說】謝謝，醫生"],
+["街市與超市", "呢條魚幾多錢一斤？", "ni1 tiu4 jyu2 gei2 do1 cin2 jat1 gan1", "【你問】這條魚多少錢一斤？"],
+["街市與超市", "畀我一斤菜心", "bei2 ngo5 jat1 gan1 coi3 sam1", "【你說】給我一斤菜心"],
+["街市與超市", "平啲得唔得？", "ping4 di1 dak1 m4 dak1", "【你說】便宜點行不行？"],
+["街市與超市", "呢啲菜新唔新鮮？", "ni1 di1 coi3 san1 m4 san1 sin1", "【你問】這些菜新不新鮮？"],
+["街市與超市", "唔該，幫我劏魚", "m4 goi1, bong1 ngo5 tong1 jyu2", "【你說】麻煩幫我把魚處理好（去鱗去內臟）"],
+["街市與超市", "唔該，幫我斬開", "m4 goi1, bong1 ngo5 zaam2 hoi1", "【你說】麻煩幫我剁開（買肉或雞時）"],
+["街市與超市", "買一送一", "maai5 jat1 sung3 jat1", "【標示】買一送一"],
+["街市與超市", "幾時過期？", "gei2 si4 gwo3 kei4", "【你問】什麼時候過期？"],
+["街市與超市", "有冇會員卡？", "jau5 mou5 wui6 jyun4 kaat1", "【店員問】有沒有會員卡？"],
+["街市與超市", "收銀處喺邊度？", "sau1 ngan4 cyu3 hai2 bin1 dou6", "【你問】收銀處在哪裡？"],
+["街市與超市", "要唔要膠袋？", "jiu3 m4 jiu3 gaau1 doi2", "【店員問】要不要塑膠袋？"],
+["街市與超市", "我自己有帶袋", "ngo5 zi6 gei2 jau5 daai3 doi2", "【你答】我自己有帶袋子"],
+["付款與八達通", "我用八達通", "ngo5 jung6 baat3 daat6 tung1", "【你說】我用八達通付款"],
+["付款與八達通", "我想增值", "ngo5 soeng2 zang1 zik6", "【你說】我想給八達通充值"],
+["付款與八達通", "八達通唔夠錢", "baat3 daat6 tung1 m4 gau3 cin2", "【你說】八達通餘額不夠"],
+["付款與八達通", "你哋收唔收信用卡？", "nei5 dei6 sau1 m4 sau1 seon3 jung6 kaat1", "【你問】你們收不收信用卡？"],
+["付款與八達通", "我想碌卡", "ngo5 soeng2 luk1 kaat1", "【你說】我想刷卡"],
+["付款與八達通", "可唔可以用電子支付？", "ho2 m4 ho2 ji5 jung6 din6 zi2 zi1 fu6", "【你問】可以用電子支付嗎？"],
+["付款與八達通", "我用轉數快", "ngo5 jung6 zyun3 sou3 faai3", "【你說】我用「轉數快」（香港的即時轉帳）"],
+["付款與八達通", "你掃碼啦", "nei5 sou3 maa5 laa1", "【你說】你來掃碼吧"],
+["付款與八達通", "淨係收現金", "zing6 hai6 sau1 jin6 gam1", "【店員說】只收現金"],
+["付款與八達通", "有冇散銀？", "jau5 mou5 saan2 ngan2", "【你問】有沒有零錢？"],
+["付款與八達通", "畀你一百蚊", "bei2 nei5 jat1 baak3 man1", "【你說】給你一百塊"],
+["付款與八達通", "唔使找喇", "m4 sai2 zaau2 laa3", "【你說】不用找了"],
+["付款與八達通", "你找錯咗錢", "nei5 zaau2 co3 zo2 cin2", "【你說】你找錯錢了"],
+["飲茶點心", "兩位，有冇位？", "loeng5 wai2, jau5 mou5 wai2", "【你說】兩位，有位子嗎？"],
+["飲茶點心", "要唔要搭枱？", "jiu3 m4 jiu3 daap3 toi2", "【店員問】要不要和別人併桌？"],
+["飲茶點心", "飲咩茶？", "jam2 me1 caa4", "【店員問】喝什麼茶？"],
+["飲茶點心", "普洱", "pou2 nei2", "【你答】普洱茶"],
+["飲茶點心", "菊花", "guk1 faa1", "【你答】菊花茶"],
+["飲茶點心", "唔該，加水", "m4 goi1, gaa1 seoi2", "【你說】麻煩給茶壺加水"],
+["飲茶點心", "蝦餃、燒賣", "haa1 gaau2, siu1 maai2", "【你點】蝦餃、燒賣"],
+["飲茶點心", "叉燒包", "caa1 siu1 baau1", "【你點】叉燒包"],
+["飲茶點心", "腸粉", "coeng2 fan2", "【你點】腸粉"],
+["飲茶點心", "鳳爪", "fung6 zaau2", "【你點】鳳爪"],
+["飲茶點心", "蘿蔔糕", "lo4 baak6 gou1", "【你點】蘿蔔糕"],
+["飲茶點心", "再加一籠蝦餃", "zoi3 gaa1 jat1 lung4 haa1 gaau2", "【你說】再加一籠蝦餃"],
+["飲茶點心", "夠咗，唔該埋單", "gau3 zo2, m4 goi1 maai4 daan1", "【你說】夠了，麻煩結帳"],
+["外賣與送餐", "我想叫外賣", "ngo5 soeng2 giu3 ngoi6 maai6", "【你說】我想叫外賣"],
+["外賣與送餐", "堂食定外賣？", "tong4 sik6 ding6 ngoi6 maai6", "【店員問】內用還是外帶？"],
+["外賣與送餐", "打包，唔該", "daa2 baau1, m4 goi1", "【你說】麻煩外帶"],
+["外賣與送餐", "送到邊度？", "sung3 dou3 bin1 dou6", "【店員問】送到哪裡？"],
+["外賣與送餐", "大約幾時到？", "daai6 joek3 gei2 si4 dou3", "【你問】大約什麼時候到？"],
+["外賣與送餐", "我已經喺樓下", "ngo5 ji5 ging1 hai2 lau4 haa6", "【送餐員說】我已經在樓下"],
+["外賣與送餐", "請放喺門口", "cing2 fong3 hai2 mun4 hau2", "【你說】請放在門口"],
+["外賣與送餐", "個單點解仲未到？", "go3 daan1 dim2 gaai2 zung6 mei6 dou3", "【你問】訂單怎麼還沒到？"],
+["外賣與送餐", "食物凍咗", "sik6 mat6 dung3 zo2", "【你說】食物涼了"],
+["外賣與送餐", "漏咗一樣嘢", "lau6 zo2 jat1 joeng6 je5", "【你說】漏了一樣東西"],
+["外賣與送餐", "我想取消訂單", "ngo5 soeng2 ceoi2 siu1 deng6 daan1", "【你說】我想取消訂單"],
+["交通補充：輕鐵、渡輪、機場", "呢架車去唔去屯門？", "ni1 gaa3 ce1 heoi3 m4 heoi3 tyun4 mun4", "【你問】這輛車去不去屯門？"],
+["交通補充：輕鐵、渡輪、機場", "輕鐵要拍卡", "hing1 tit3 jiu3 paak3 kaat1", "【提醒】輕鐵上下車都要拍卡"],
+["交通補充：輕鐵、渡輪、機場", "碼頭喺邊度？", "maa5 tau4 hai2 bin1 dou6", "【你問】碼頭在哪裡？"],
+["交通補充：輕鐵、渡輪、機場", "一張去中環嘅船飛", "jat1 zoeng1 heoi3 zung1 waan4 ge3 syun4 fei1", "【你說】一張去中環的船票"],
+["交通補充：輕鐵、渡輪、機場", "唔該打錶", "m4 goi1 daa2 biu1", "【你對的士司機說】麻煩跳錶"],
+["交通補充：輕鐵、渡輪、機場", "我想去機場", "ngo5 soeng2 heoi3 gei1 coeng4", "【你說】我想去機場"],
+["交通補充：輕鐵、渡輪、機場", "機場快線喺邊度搭？", "gei1 coeng4 faai3 sin3 hai2 bin1 dou6 daap3", "【你問】機場快線在哪裡搭？"],
+["交通補充：輕鐵、渡輪、機場", "呢班機延誤咗", "ni1 baan1 gei1 jin4 ng6 zo2", "【你說】這班航班延誤了"],
+["交通補充：輕鐵、渡輪、機場", "我想過關", "ngo5 soeng2 gwo3 gwaan1", "【你說】我想過關（出入境）"],
+["交通補充：輕鐵、渡輪、機場", "請問幾號閘口？", "cing2 man6 gei2 hou6 zaap6 hau2", "【你問】請問幾號登機口？"],
+["手機與網絡", "呢度有冇免費無線網絡？", "ni1 dou6 jau5 mou5 min5 fai3 mou4 sin3 mong5 lok6", "【你問】這裡有免費 WiFi 嗎？"],
+["手機與網絡", "密碼係咩？", "mat6 maa5 hai6 me1", "【你問】密碼是什麼？"],
+["手機與網絡", "我部手機冇電", "ngo5 bou6 sau2 gei1 mou5 din6", "【你說】我的手機沒電了"],
+["手機與網絡", "借個充電器嚟用下得唔得？", "ze3 go3 cung1 din6 hei3 lai4 jung6 haa5 dak1 m4 dak1", "【你問】借充電器用一下可以嗎？"],
+["手機與網絡", "我部手機壞咗", "ngo5 bou6 sau2 gei1 waai6 zo2", "【你說】我的手機壞了"],
+["手機與網絡", "我傳訊息畀你", "ngo5 cyun4 seon3 sik1 bei2 nei5", "【你說】我傳訊息給你"],
+["手機與網絡", "你嘅電話幾多號？", "nei5 ge3 din6 waa2 gei2 do1 hou6", "【你問】你的電話號碼是多少？"],
+["手機與網絡", "我冇訊號", "ngo5 mou5 seon3 hou6", "【你說】我沒有訊號"],
+["手機與網絡", "網絡好慢", "mong5 lok6 hou2 maan6", "【你說】網路很慢"],
+["家居與大廈", "管理處喺邊度？", "gun2 lei5 cyu3 hai2 bin1 dou6", "【你問】管理處在哪裡？"],
+["家居與大廈", "我唔見咗鎖匙", "ngo5 m4 gin3 zo2 so2 si4", "【你說】我的鑰匙不見了"],
+["家居與大廈", "我屋企漏水", "ngo5 uk1 kei2 lau6 seoi2", "【你說】我家漏水"],
+["家居與大廈", "洗手盤塞咗", "sai2 sau2 pun4 sak1 zo2", "【你說】洗手台堵住了"],
+["家居與大廈", "冷氣壞咗", "laang5 hei3 waai6 zo2", "【你說】冷氣壞了"],
+["家居與大廈", "跳咗掣", "tiu3 zo2 zai3", "【你說】跳電了"],
+["家居與大廈", "電梯壞咗", "din6 tai1 waai6 zo2", "【你說】電梯壞了"],
+["家居與大廈", "我想搵人嚟維修", "ngo5 soeng2 wan2 jan4 lai4 wai4 sau1", "【你說】我想找人來維修"],
+["家居與大廈", "幾時上嚟睇？", "gei2 si4 soeng5 lai4 tai2", "【你問】什麼時候上來看？"],
+["家居與大廈", "垃圾放喺邊度？", "laap6 saap3 fong3 hai2 bin1 dou6", "【你問】垃圾放哪裡？"],
+["家居與大廈", "隔籬鄰居好嘈", "gaak3 lei4 leon4 geoi1 hou2 cou4", "【你說】隔壁鄰居很吵"],
+["藥房與牙醫", "我想買退燒藥", "ngo5 soeng2 maai5 teoi3 siu1 joek6", "【你說】我想買退燒藥"],
+["藥房與牙醫", "有冇止痛藥？", "jau5 mou5 zi2 tung3 joek6", "【你問】有沒有止痛藥？"],
+["藥房與牙醫", "呢隻藥點食？", "ni1 zek3 joek6 dim2 sik6", "【你問】這藥怎麼吃？"],
+["藥房與牙醫", "邊間藥房開到好夜？", "bin1 gaan1 joek6 fong2 hoi1 dou3 hou2 je6", "【你問】哪家藥房開得晚？"],
+["藥房與牙醫", "我牙痛", "ngo5 ngaa4 tung3", "【你說】我牙痛"],
+["藥房與牙醫", "我想洗牙", "ngo5 soeng2 sai2 ngaa4", "【你說】我想洗牙"],
+["藥房與牙醫", "我有蛀牙", "ngo5 jau5 zyu3 ngaa4", "【你說】我有蛀牙"],
+["藥房與牙醫", "牙肉出血", "ngaa4 juk6 ceot1 hyut3", "【你說】牙齦出血"],
+["藥房與牙醫", "要唔要拔牙？", "jiu3 m4 jiu3 bat6 ngaa4", "【你問】需不需要拔牙？"],
+["藥房與牙醫", "會唔會好痛？", "wui5 m4 wui5 hou2 tung3", "【你問】會不會很痛？"],
+["藥房與牙醫", "幾時覆診？", "gei2 si4 fuk1 can2", "【你問】什麼時候複診？"],
+["景點", "呢度有咩好玩？", "ni1 dou6 jau5 me1 hou2 waan2", "【你問】這裡有什麼好玩的？"],
+["景點", "去太平山點行？", "heoi3 taai3 ping4 saan1 dim2 haang4", "【你問】去太平山怎麼走？"],
+["景點", "要唔要排隊？", "jiu3 m4 jiu3 paai4 deoi2", "【你問】要不要排隊？"],
+["景點", "排咗好耐隊", "paai4 zo2 hou2 noi6 deoi2", "【你說】排了很久的隊"],
+["景點", "一張成人飛，一張小童飛", "jat1 zoeng1 sing4 jan4 fei1, jat1 zoeng1 siu2 tung4 fei1", "【你說】一張成人票，一張兒童票"],
+["景點", "幾多錢入場？", "gei2 do1 cin2 jap6 coeng4", "【你問】門票多少錢？"],
+["景點", "幾點開門／幾點關門？", "gei2 dim2 hoi1 mun4 / gei2 dim2 gwaan1 mun4", "【你問】幾點開門／幾點關門？"],
+["景點", "唔該，可以幫我影張相嗎？", "m4 goi1, ho2 ji5 bong1 ngo5 jing2 zoeng1 soeng2 maa3", "【你說】麻煩你，可以幫我拍張照嗎？"],
+["景點", "喺呢度影相得唔得？", "hai2 ni1 dou6 jing2 soeng2 dak1 m4 dak1", "【你問】這裡可以拍照嗎？"],
+["景點", "邊度睇夜景最靚？", "bin1 dou6 tai2 je6 ging2 zeoi3 leng3", "【你問】哪裡看夜景最漂亮？"],
+["景點", "洗手間喺邊度？", "sai2 sau2 gaan1 hai2 bin1 dou6", "【你問】洗手間在哪裡？"],
+["景點", "今日好多人", "gam1 jat6 hou2 do1 jan4", "【你說】今天人好多"],
+["娛樂", "套戲幾點開場？", "tou3 hei3 gei2 dim2 hoi1 coeng4", "【你問】這部電影幾點開場？"],
+["娛樂", "兩張飛，要中間啲嘅位", "loeng5 zoeng1 fei1, jiu3 zung1 gaan1 di1 ge3 wai2", "【你說】兩張票，要中間一點的位子"],
+["娛樂", "呢套戲好唔好睇？", "ni1 tou3 hei3 hou2 m4 hou2 tai2", "【你問】這部電影好不好看？"],
+["娛樂", "有冇字幕？", "jau5 mou5 zi6 mok6", "【你問】有沒有字幕？"],
+["娛樂", "我想訂位", "ngo5 soeng2 deng6 wai2", "【你說】我想訂位"],
+["娛樂", "今晚有冇節目？", "gam1 maan5 jau5 mou5 zit3 muk6", "【你問】今晚有沒有活動？"],
+["娛樂", "一齊去唱歌好唔好？", "jat1 cai4 heoi3 coeng3 go1 hou2 m4 hou2", "【你說】一起去唱歌好不好？"],
+["娛樂", "點歌", "dim2 go1", "【你說】點歌"],
+["娛樂", "你鍾意玩咩？", "nei5 zung1 ji3 waan2 me1", "【你問】你喜歡玩什麼？"],
+["娛樂", "好好玩", "hou2 hou2 waan2", "【你說】很好玩"],
+["娛樂", "好悶", "hou2 mun6", "【你說】很無聊"],
+["娛樂", "下次再約", "haa6 ci3 zoi3 joek3", "【你說】下次再約"],
+["運動場", "我想租場", "ngo5 soeng2 zou1 coeng4", "【你說】我想租場地"],
+["運動場", "訂咗兩個鐘", "deng6 zo2 loeng5 go3 zung1", "【你說】訂了兩個小時"],
+["運動場", "邊度可以換衫？", "bin1 dou6 ho2 ji5 wun6 saam1", "【你問】哪裡可以換衣服？"],
+["運動場", "打波", "daa2 bo1", "【你說】打球（籃球、足球等）"],
+["運動場", "踢波", "tek3 bo1", "【你說】踢足球"],
+["運動場", "游水", "jau4 seoi2", "【你說】游泳"],
+["運動場", "跑步", "paau2 bou6", "【你說】跑步"],
+["運動場", "我想報名參加班", "ngo5 soeng2 bou3 meng2 caam1 gaa1 baan1", "【你說】我想報名參加課程"],
+["運動場", "你幾時有空打波？", "nei5 gei2 si4 jau5 hung1 daa2 bo1", "【你問】你什麼時候有空打球？"],
+["運動場", "我流咗好多汗", "ngo5 lau4 zo2 hou2 do1 hon6", "【你說】我流了很多汗"],
+["運動場", "好攰", "hou2 gui6", "【你說】很累"],
+["運動場", "休息一陣先", "jau1 sik1 jat1 zan6 sin1", "【你說】先休息一下"],
+["圖書館使用", "我想借書", "ngo5 soeng2 ze3 syu1", "【你說】我想借書"],
+["圖書館使用", "我想還書", "ngo5 soeng2 waan4 syu1", "【你說】我想還書"],
+["圖書館使用", "我想申請借書證", "ngo5 soeng2 san1 cing2 ze3 syu1 zing3", "【你說】我想辦借書證"],
+["圖書館使用", "可以借幾本？", "ho2 ji5 ze3 gei2 bun2", "【你問】可以借幾本？"],
+["圖書館使用", "借幾耐？", "ze3 gei2 noi6", "【你問】可以借多久？"],
+["圖書館使用", "逾期要罰款嗎？", "jyu4 kei4 jiu3 fat6 fun2 maa3", "【你問】逾期要罰款嗎？"],
+["圖書館使用", "呢本書喺邊度搵到？", "ni1 bun2 syu1 hai2 bin1 dou6 wan2 dou2", "【你問】這本書在哪裡找得到？"],
+["圖書館使用", "可以續借嗎？", "ho2 ji5 zuk6 ze3 maa3", "【你問】可以續借嗎？"],
+["圖書館使用", "請保持安靜", "cing2 bou2 ci4 on1 zing6", "【標示】請保持安靜"],
+["圖書館使用", "呢度可以自修嗎？", "ni1 dou6 ho2 ji5 zi6 sau1 maa3", "【你問】這裡可以自習嗎？"],
+["圖書館使用", "有冇影印機？", "jau5 mou5 jing2 jan3 gei1", "【你問】有沒有影印機？"],
+["語氣詞", "好啦", "hou2 laa1", "【語氣詞 啦】好吧（同意、讓步）"],
+["語氣詞", "食飯啦", "sik6 faan6 laa1", "【語氣詞 啦】吃飯吧（提議、催促）"],
+["語氣詞", "係喎", "hai6 wo3", "【語氣詞 喎】對哦（忽然想起、提醒）"],
+["語氣詞", "佢話今日唔嚟喎", "keoi5 waa6 gam1 jat6 m4 lai4 wo3", "【語氣詞 喎】他說今天不來呢（轉述別人的話）"],
+["語氣詞", "咁就算囉", "gam2 zau6 syun3 lo1", "【語氣詞 囉】那就算了（無奈、理所當然）"],
+["語氣詞", "淨係得一個啫", "zing6 hai6 dak1 jat1 go3 ze1", "【語氣詞 啫】只有一個而已（強調少）"],
+["語氣詞", "得五蚊咋", "dak1 ng5 man1 zaa3", "【語氣詞 咋】只有五塊而已"],
+["語氣詞", "你食咗飯未呀？", "nei5 sik6 zo2 faan6 mei6 aa3", "【語氣詞 呀】你吃飯了嗎？（語氣親切）"],
+["語氣詞", "你呢？", "nei5 ne1", "【語氣詞 呢】你呢？（追問）"],
+["語氣詞", "唔係嘛？", "m4 hai6 maa3", "【語氣詞 嘛】不會吧？（驚訝）"],
+["語氣詞", "我哋行吖", "ngo5 dei6 haang4 aa1", "【語氣詞 吖】我們走吧（輕輕建議）"],
+["語氣詞", "做咩呀？", "zou6 me1 aa3", "【日常】幹嘛呀？"],
+["語氣詞", "點解㗎？", "dim2 gaai2 gaa3", "【日常】為什麼呀？"],
+["連接詞", "因為落雨，所以我冇出街", "jan1 wai6 lok6 jyu5, so2 ji5 ngo5 mou5 ceot1 gaai1", "【因為……所以】因為下雨，所以我沒出門"],
+["連接詞", "我想去，但係冇時間", "ngo5 soeng2 heoi3, daan6 hai6 mou5 si4 gaan3", "【但係】我想去，但是沒時間"],
+["連接詞", "不過都幾好食", "bat1 gwo3 dou1 gei2 hou2 sik6", "【不過】不過還挺好吃的"],
+["連接詞", "如果聽日落雨，就唔去喇", "jyu4 gwo2 ting1 jat6 lok6 jyu5, zau6 m4 heoi3 laa3", "【如果……就】如果明天下雨，就不去了"],
+["連接詞", "我哋食咗飯先去", "ngo5 dei6 sik6 zo2 faan6 sin1 heoi3", "【先】我們吃了飯再去"],
+["連接詞", "食完飯之後，我哋去行街", "sik6 jyun4 faan6 zi1 hau6, ngo5 dei6 heoi3 haang4 gaai1", "【之後】吃完飯之後，我們去逛街"],
+["連接詞", "你同我一齊去", "nei5 tung4 ngo5 jat1 cai4 heoi3", "【同】你跟我一起去"],
+["連接詞", "咖啡同埋奶茶都得", "gaa3 fe1 tung4 maai4 naai5 caa4 dou1 dak1", "【同埋】咖啡和奶茶都可以"],
+["連接詞", "你飲咖啡定係奶茶？", "nei5 jam2 gaa3 fe1 ding6 hai6 naai5 caa4", "【定係】你喝咖啡還是奶茶？"],
+["連接詞", "不如我哋叫外賣啦", "bat1 jyu4 ngo5 dei6 giu3 ngoi6 maai6 laa1", "【不如】不如我們叫外賣吧"],
+["連接詞", "而且價錢好平", "ji4 ce2 gaa3 cin4 hou2 ping4", "【而且】而且價錢很便宜"],
+["連接詞", "一路行一路傾", "jat1 lou6 haang4 jat1 lou6 king1", "【一路……一路】一邊走一邊聊"],
+["連接詞", "雖然好貴，但係值得", "seoi1 jin4 hou2 gwai3, daan6 hai6 zik6 dak1", "【雖然……但係】雖然很貴，但是值得"],
+["描述經過", "琴日我同朋友去咗食飯", "kam4 jat6 ngo5 tung4 pang4 jau5 heoi3 zo2 sik6 faan6", "【說經過】昨天我跟朋友去吃飯"],
+["描述經過", "我哋喺銅鑼灣食嘅", "ngo5 dei6 hai2 tung4 lo4 waan1 sik6 ge2", "【說經過】我們是在銅鑼灣吃的"],
+["描述經過", "啱啱收工", "ngaam1 ngaam1 sau1 gung1", "【說經過】剛剛下班"],
+["描述經過", "先食飯，跟住去睇戲", "sin1 sik6 faan6, gan1 zyu6 heoi3 tai2 hei3", "【說經過】先吃飯，然後去看電影"],
+["描述經過", "後尾我哋去咗唱歌", "hau6 mei5 ngo5 dei6 heoi3 zo2 coeng3 go1", "【說經過】後來我們去唱歌了"],
+["描述經過", "點知落咗大雨", "dim2 zi1 lok6 zo2 daai6 jyu5", "【說經過】誰知下了大雨"],
+["描述經過", "結果我哋冇去成", "git3 gwo2 ngo5 dei6 mou5 heoi3 seng4", "【說經過】結果我們沒去成"],
+["描述經過", "最後我哋搭的士返屋企", "zeoi3 hau6 ngo5 dei6 daap3 dik1 si2 faan1 uk1 kei2", "【說經過】最後我們搭計程車回家"],
+["描述經過", "我遲到咗十分鐘", "ngo5 ci4 dou3 zo2 sap6 fan1 zung1", "【說經過】我遲到了十分鐘"],
+["描述經過", "我記唔起喇", "ngo5 gei3 m4 hei2 laa3", "【說經過】我想不起來了"],
+["描述經過", "嗰日真係好攰", "go2 jat6 zan1 hai6 hou2 gui6", "【說經過】那天真的好累"],
+["描述計劃與看法", "我打算下個月去旅行", "ngo5 daa2 syun3 haa6 go3 jyut6 heoi3 leoi5 hang4", "【計劃】我打算下個月去旅行"],
+["描述計劃與看法", "我諗住聽日去", "ngo5 nam2 zyu6 ting1 jat6 heoi3", "【計劃】我想著明天去"],
+["描述計劃與看法", "睇下先", "tai2 haa5 sin1", "【計劃】先看看再說"],
+["描述計劃與看法", "你覺得點樣？", "nei5 gok3 dak1 dim2 joeng2", "【看法】你覺得怎麼樣？"],
+["描述計劃與看法", "我覺得幾好", "ngo5 gok3 dak1 gei2 hou2", "【看法】我覺得挺好"],
+["描述計劃與看法", "我同意", "ngo5 tung4 ji3", "【看法】我同意"],
+["描述計劃與看法", "我唔同意", "ngo5 m4 tung4 ji3", "【看法】我不同意"],
+["描述計劃與看法", "可能會落雨", "ho2 nang4 wui5 lok6 jyu5", "【看法】可能會下雨"],
+["描述計劃與看法", "我唔肯定", "ngo5 m4 hang2 ding6", "【看法】我不確定"],
+["描述計劃與看法", "其實都唔錯", "kei4 sat6 dou1 m4 co3", "【看法】其實也不錯"],
+["描述計劃與看法", "講真，我唔太鍾意", "gong2 zan1, ngo5 m4 taai3 zung1 ji3", "【看法】說真的，我不太喜歡"],
+["描述計劃與看法", "好似幾貴噉", "hou2 ci5 gei2 gwai3 gam2", "【看法】好像挺貴的"],
+["精聽訓練", "你講咩呀？我聽唔到", "nei5 gong2 me1 aa3? ngo5 teng1 m4 dou2", "【快速口語】你說什麼？我聽不到"],
+["精聽訓練", "咩話？", "me1 waa2", "【快速口語】什麼？（沒聽清）"],
+["精聽訓練", "講慢啲，唔該", "gong2 maan6 di1, m4 goi1", "【快速口語】請說慢一點"],
+["精聽訓練", "即係咩意思？", "zik1 hai6 me1 ji3 si1", "【快速口語】就是什麼意思？"],
+["精聽訓練", "唔使客氣", "m4 sai2 haak3 hei3", "【快速口語】不用客氣"],
+["精聽訓練", "冇問題", "mou5 man6 tai4", "【快速口語】沒問題"],
+["精聽訓練", "得閒飲茶", "dak1 haan4 jam2 caa4", "【快速口語】有空一起喝茶（客套話，不一定真的約）"],
+["精聽訓練", "邊有咁易", "bin1 jau5 gam3 jik6", "【快速口語】哪有這麼容易"],
+["精聽訓練", "唔好咁啦", "m4 hou2 gam3 laa1", "【快速口語】別這樣啦"],
+["精聽訓練", "係咪真㗎？", "hai6 mai6 zan1 gaa3", "【快速口語】是真的嗎？"],
+["精聽訓練", "你估我唔知咩？", "nei5 gu2 ngo5 m4 zi1 me1", "【快速口語】你以為我不知道嗎？"],
+["精聽訓練", "我哋即刻去", "ngo5 dei6 zik1 haak1 heoi3", "【快速口語】我們馬上去"],
+["閒聊綜合", "你近排點呀？", "nei5 gan6 paai4 dim2 aa3", "【你問】你最近怎麼樣？"],
+["閒聊綜合", "都係咁啦，忙死", "dou1 hai6 gam2 laa1, mong4 sei2", "【你答】老樣子，忙死了"],
+["閒聊綜合", "你放假去咗邊度？", "nei5 fong3 gaa3 heoi3 zo2 bin1 dou6", "【你問】你放假去了哪裡？"],
+["閒聊綜合", "我返咗屋企休息", "ngo5 faan1 zo2 uk1 kei2 jau1 sik1", "【你答】我回家休息了"],
+["閒聊綜合", "你鍾意食咩？", "nei5 zung1 ji3 sik6 me1", "【你問】你喜歡吃什麼？"],
+["閒聊綜合", "我最鍾意食燒味", "ngo5 zeoi3 zung1 ji3 sik6 siu1 mei2", "【你答】我最喜歡吃燒味"],
+["閒聊綜合", "你平時做咩運動？", "nei5 ping4 si4 zou6 me1 wan6 dung6", "【你問】你平常做什麼運動？"],
+["閒聊綜合", "你學廣東話學咗幾耐？", "nei5 hok6 gwong2 dung1 waa2 hok6 zo2 gei2 noi6", "【你問】你學廣東話學了多久？"],
+["閒聊綜合", "我學咗半年", "ngo5 hok6 zo2 bun3 nin4", "【你答】我學了半年"],
+["閒聊綜合", "你講得好好呀", "nei5 gong2 dak1 hou2 hou2 aa3", "【對方說】你說得很好"],
+["閒聊綜合", "邊度，我講得唔好", "bin1 dou6, ngo5 gong2 dak1 m4 hou2", "【你答】哪裡哪裡，我說得不好（謙虛）"],
+["閒聊綜合", "我哋再傾多啲啦", "ngo5 dei6 zoi3 king1 do1 di1 laa1", "【你說】我們再多聊一會吧"],
+["約朋友與社交", "今晚有冇空？", "gam1 maan5 jau5 mou5 hung1", "【你問】今晚有空嗎？"],
+["約朋友與社交", "一齊食飯，好唔好？", "jat1 cai4 sik6 faan6, hou2 m4 hou2", "【你問】一起吃飯好嗎？"],
+["約朋友與社交", "喺邊度見？", "hai2 bin1 dou6 gin3", "【你問】在哪裡見？"],
+["約朋友與社交", "幾點見？", "gei2 dim2 gin3", "【你問】幾點見？"],
+["約朋友與社交", "七點喺地鐵站出口見", "cat1 dim2 hai2 dei6 tit3 zaam6 ceot1 hau2 gin3", "【你說】七點在地鐵站出口見"],
+["約朋友與社交", "我遲啲到", "ngo5 ci4 di1 dou3", "【你說】我晚點到"],
+["約朋友與社交", "塞車，等我十分鐘", "sak1 ce1, dang2 ngo5 sap6 fan1 zung1", "【你說】塞車，等我十分鐘"],
+["約朋友與社交", "你到未呀？", "nei5 dou3 mei6 aa3", "【你問】你到了沒？"],
+["約朋友與社交", "我喺出面等你", "ngo5 hai2 ceot1 min6 dang2 nei5", "【你說】我在外面等你"],
+["約朋友與社交", "有啲事，走唔開", "jau5 di1 si6, zau2 m4 hoi1", "【你說】有點事，抽不開身"],
+["約朋友與社交", "改期，得唔得？", "goi2 kei4, dak1 m4 dak1", "【你問】改期可以嗎？"],
+["約朋友與社交", "下次啦", "haa6 ci3 laa1", "【你說】下次吧"],
+["約朋友與社交", "搵日再約", "wan2 jat6 zoi3 joek3", "【你說】改天再約"],
+["約朋友與社交", "生日快樂", "saang1 jat6 faai3 lok6", "【你說】生日快樂"],
+["檢測：10 分鐘自由聊天", "你叫咩名？你喺邊度出世？", "nei5 giu3 me1 meng2? nei5 hai2 bin1 dou6 ceot1 sai3", "【題目 1】你叫什麼名字？在哪裡出生？"],
+["檢測：10 分鐘自由聊天", "你而家住喺邊度？", "nei5 ji4 gaa1 zyu6 hai2 bin1 dou6", "【題目 2】你現在住在哪裡？"],
+["檢測：10 分鐘自由聊天", "你每日幾點起身？", "nei5 mui5 jat6 gei2 dim2 hei2 san1", "【題目 3】你每天幾點起床？"],
+["檢測：10 分鐘自由聊天", "你平時鍾意做咩？", "nei5 ping4 si4 zung1 ji3 zou6 me1", "【題目 4】你平時喜歡做什麼？"],
+["檢測：10 分鐘自由聊天", "講下你琴日做咗啲咩", "gong2 haa5 nei5 kam4 jat6 zou6 zo2 di1 me1", "【題目 5】說說你昨天做了什麼"],
+["檢測：10 分鐘自由聊天", "你最鍾意食咩嘢？點解？", "nei5 zeoi3 zung1 ji3 sik6 me1 je5? dim2 gaai2", "【題目 6】你最喜歡吃什麼？為什麼？"],
+["檢測：10 分鐘自由聊天", "你去過香港邊度玩？", "nei5 heoi3 gwo3 hoeng1 gong2 bin1 dou6 waan2", "【題目 7】你在香港去過哪裡玩？"],
+["檢測：10 分鐘自由聊天", "你周末打算做咩？", "nei5 zau1 mut6 daa2 syun3 zou6 me1", "【題目 8】你週末打算做什麼？"],
+["檢測：10 分鐘自由聊天", "你覺得學廣東話最難係邊部分？", "nei5 gok3 dak1 hok6 gwong2 dung1 waa2 zeoi3 naan4 hai6 bin1 bou6 fan6", "【題目 9】你覺得學廣東話最難是哪部分？"],
+["檢測：10 分鐘自由聊天", "你以後想做咩？", "nei5 ji5 hau6 soeng2 zou6 me1", "【題目 10】你以後想做什麼？"],
+["辦公室問候與閒聊", "早晨！", "zou2 san4", "【同事】早安！"],
+["辦公室問候與閒聊", "返工喇", "faan1 gung1 laa3", "【日常】上班了"],
+["辦公室問候與閒聊", "你食咗早餐未？", "nei5 sik6 zo2 zou2 caan1 mei6", "【你問】你吃早餐了嗎？"],
+["辦公室問候與閒聊", "今日好忙呀？", "gam1 jat6 hou2 mong4 aa3", "【你問】今天很忙嗎？"],
+["辦公室問候與閒聊", "好耐冇見", "hou2 noi6 mou5 gin3", "【你說】好久不見"],
+["辦公室問候與閒聊", "你個週末過得點呀？", "nei5 go3 zau1 mut6 gwo3 dak1 dim2 aa3", "【你問】你週末過得怎麼樣？"],
+["辦公室問候與閒聊", "我哋去飲杯咖啡啦", "ngo5 dei6 heoi3 jam2 bui1 gaa3 fe1 laa1", "【你說】我們去喝杯咖啡吧"],
+["辦公室問候與閒聊", "琴晚瞓得好唔好？", "kam4 maan5 fan3 dak1 hou2 m4 hou2", "【你問】昨晚睡得好嗎？"],
+["辦公室問候與閒聊", "下個禮拜我放假", "haa6 go3 lai5 baai3 ngo5 fong3 gaa3", "【你說】下禮拜我放假"],
+["辦公室問候與閒聊", "老闆到咗未？", "lou5 baan2 dou3 zo2 mei6", "【你問】老闆到了沒？"],
+["辦公室問候與閒聊", "同事都好好人", "tung4 si6 dou1 hou2 hou2 jan4", "【你說】同事都很好"],
+["辦公室問候與閒聊", "收工喇，聽日見", "sau1 gung1 laa3, ting1 jat6 gin3", "【你說】下班了，明天見"],
+["辦公室設備與文具", "影印機喺邊度？", "jing2 jan3 gei1 hai2 bin1 dou6", "【你問】影印機在哪裡？"],
+["辦公室設備與文具", "打印機冇紙喇", "daa2 jan3 gei1 mou5 zi2 laa3", "【你說】印表機沒紙了"],
+["辦公室設備與文具", "我要影印十份", "ngo5 jiu3 jing2 jan3 sap6 fan6", "【你說】我要影印十份"],
+["辦公室設備與文具", "借支筆畀我，好唔好？", "ze3 zi1 bat1 bei2 ngo5, hou2 m4 hou2", "【你問】借我一支筆，好嗎？"],
+["辦公室設備與文具", "釘書機", "deng1 syu1 gei1", "【文具】訂書機"],
+["辦公室設備與文具", "文件夾", "man4 gin2 gaap2", "【文具】文件夾"],
+["辦公室設備與文具", "我部電腦好慢", "ngo5 bou6 din6 nou5 hou2 maan6", "【你說】我的電腦很慢"],
+["辦公室設備與文具", "死機喇", "sei2 gei1 laa3", "【你說】當機了"],
+["辦公室設備與文具", "重新開機試下", "cung4 san1 hoi1 gei1 si3 haa5", "【你說】重新開機試試"],
+["辦公室設備與文具", "我發咗電郵畀你", "ngo5 faat3 zo2 din6 jau4 bei2 nei5", "【你說】我寄了電郵給你"],
+["辦公室設備與文具", "你收到封電郵未？", "nei5 sau1 dou2 fung1 din6 jau4 mei6", "【你問】你收到那封電郵了嗎？"],
+["辦公室設備與文具", "我唔記得咗密碼", "ngo5 m4 gei3 dak1 zo2 mat6 maa5", "【你說】我忘記密碼了"],
+["午餐與同事聚餐", "今日食咩好？", "gam1 jat6 sik6 me1 hou2", "【你問】今天吃什麼好？"],
+["午餐與同事聚餐", "去茶餐廳，好唔好？", "heoi3 caa4 caan1 teng1, hou2 m4 hou2", "【你問】去茶餐廳好嗎？"],
+["午餐與同事聚餐", "我叫外賣算啦", "ngo5 giu3 ngoi6 maai6 syun3 laa1", "【你說】我還是叫外賣吧"],
+["午餐與同事聚餐", "午飯時間得一個鐘", "ng5 faan6 si4 gaan3 dak1 jat1 go3 zung1", "【你說】午休只有一小時"],
+["午餐與同事聚餐", "我請客", "ngo5 ceng2 haak3", "【你說】我請客"],
+["午餐與同事聚餐", "各付各", "gok3 fu6 gok3", "【你說】各付各的"],
+["午餐與同事聚餐", "今次我埋單", "gam1 ci3 ngo5 maai4 daan1", "【你說】這次我來結帳"],
+["午餐與同事聚餐", "下次輪到你", "haa6 ci3 leon4 dou3 nei5", "【你說】下次輪到你"],
+["午餐與同事聚餐", "食緊飯，等陣先講", "sik6 gan2 faan6, dang2 zan6 sin1 gong2", "【你說】正在吃飯，等一下再說"],
+["午餐與同事聚餐", "要快啲食，仲要返工", "jiu3 faai3 di1 sik6, zung6 jiu3 faan1 gung1", "【你說】要吃快點，還得回去上班"],
+["午餐與同事聚餐", "多謝你請客", "do1 ze6 nei5 ceng2 haak3", "【你說】謝謝你請客"],
+["工作電話與留言", "喂，你好，呢度係陳生公司", "wai2, nei5 hou2, ni1 dou6 hai6 can4 saang1 gung1 si1", "【接電話】喂，你好，這裡是陳先生公司"],
+["工作電話與留言", "請問你搵邊位？", "cing2 man6 nei5 wan2 bin1 wai2", "【接電話】請問你找哪位？"],
+["工作電話與留言", "唔好意思，佢而家唔喺度", "m4 hou2 ji3 si1, keoi5 ji4 gaa1 m4 hai2 dou6", "【接電話】不好意思，他現在不在"],
+["工作電話與留言", "佢喺度開會", "keoi5 hai2 dou6 hoi1 wui2", "【接電話】他在開會"],
+["工作電話與留言", "請問你貴姓？", "cing2 man6 nei5 gwai3 sing3", "【接電話】請問您貴姓？"],
+["工作電話與留言", "可唔可以留低你嘅電話？", "ho2 m4 ho2 ji5 lau4 dai1 nei5 ge3 din6 waa2", "【接電話】可以留下你的電話嗎？"],
+["工作電話與留言", "我遲啲再打畀你", "ngo5 ci4 di1 zoi3 daa2 bei2 nei5", "【你說】我晚點再打給你"],
+["工作電話與留言", "等陣，我幫你轉線", "dang2 zan6, ngo5 bong1 nei5 zyun3 sin3", "【接電話】請稍等，我幫你轉接"],
+["工作電話與留言", "線路唔係好清楚", "sin3 lou6 m4 hai6 hou2 cing1 co2", "【你說】線路不太清楚"],
+["工作電話與留言", "請你再講一次", "cing2 nei5 zoi3 gong2 jat1 ci3", "【你說】請你再說一次"],
+["工作電話與留言", "我想留言", "ngo5 soeng2 lau4 jin4", "【你說】我想留言"],
+["工作電話與留言", "請佢覆電畀我", "cing2 keoi5 fuk1 din6 bei2 ngo5", "【你說】請他回電給我"],
+["請假、遲到與加班", "我想請假", "ngo5 soeng2 cing2 gaa3", "【你說】我想請假"],
+["請假、遲到與加班", "我今日唔舒服，想請病假", "ngo5 gam1 jat6 m4 syu1 fuk6, soeng2 cing2 beng6 gaa3", "【你說】我今天不舒服，想請病假"],
+["請假、遲到與加班", "我想請半日假", "ngo5 soeng2 cing2 bun3 jat6 gaa3", "【你說】我想請半天假"],
+["請假、遲到與加班", "我要睇醫生", "ngo5 jiu3 tai2 ji1 sang1", "【你說】我要看醫生"],
+["請假、遲到與加班", "我想放年假", "ngo5 soeng2 fong3 nin4 gaa3", "【你說】我想休年假"],
+["請假、遲到與加班", "對唔住，我遲到咗", "deoi3 m4 zyu6, ngo5 ci4 dou3 zo2", "【你說】對不起，我遲到了"],
+["請假、遲到與加班", "今朝塞車", "gam1 ziu1 sak1 ce1", "【你說】今早塞車"],
+["請假、遲到與加班", "我今晚要加班", "ngo5 gam1 maan5 jiu3 gaa1 baan1", "【你說】我今晚要加班"],
+["請假、遲到與加班", "有冇加班津貼？", "jau5 mou5 gaa1 baan1 zeon1 tip3", "【你問】有加班津貼嗎？"],
+["請假、遲到與加班", "今日可以早啲走嗎？", "gam1 jat6 ho2 ji5 zou2 di1 zau2 maa3", "【你問】今天可以早點走嗎？"],
+["請假、遲到與加班", "我聽日返工", "ngo5 ting1 jat6 faan1 gung1", "【你說】我明天上班"],
+["請假、遲到與加班", "多謝你批准", "do1 ze6 nei5 pai1 zeon2", "【你說】謝謝你批准"],
+["簡單匯報進度", "個項目做到邊？", "go3 hong6 muk6 zou6 dou3 bin1", "【上司問】那個專案做到哪裡了？"],
+["簡單匯報進度", "我已經做完咗", "ngo5 ji5 ging1 zou6 jyun4 zo2", "【你答】我已經做完了"],
+["簡單匯報進度", "仲未做完", "zung6 mei6 zou6 jyun4", "【你答】還沒做完"],
+["簡單匯報進度", "預計聽日完成", "jyu6 gai3 ting1 jat6 jyun4 sing4", "【你答】預計明天完成"],
+["簡單匯報進度", "遇到啲問題", "jyu6 dou3 di1 man6 tai4", "【你答】遇到一些問題"],
+["簡單匯報進度", "需要多啲時間", "seoi1 jiu3 do1 di1 si4 gaan3", "【你答】需要多一點時間"],
+["簡單匯報進度", "我遲啲交畀你", "ngo5 ci4 di1 gaau1 bei2 nei5", "【你答】我晚點交給你"],
+["簡單匯報進度", "下個禮拜之前交", "haa6 go3 lai5 baai3 zi1 cin4 gaau1", "【上司說】下禮拜之前交"],
+["簡單匯報進度", "有冇咩最新進展？", "jau5 mou5 me1 zeoi3 san1 zeon3 zin2", "【上司問】有什麼最新進展？"],
+["簡單匯報進度", "我哋跟進一下", "ngo5 dei6 gan1 zeon3 jat1 haa5", "【你說】我們跟進一下"],
+["簡單匯報進度", "收到，我即刻做", "sau1 dou2, ngo5 zik1 haak1 zou6", "【你說】收到，我馬上做"],
+["工作場景 A 綜合", "早晨！今日好忙呀？", "zou2 san4! gam1 jat6 hou2 mong4 aa3", "【辦公室】早安！今天很忙嗎？"],
+["工作場景 A 綜合", "有啲，我要影印十份文件", "jau5 di1, ngo5 jiu3 jing2 jan3 sap6 fan6 man4 gin2", "【辦公室】有點，我要影印十份文件"],
+["工作場景 A 綜合", "影印機冇紙，我幫你換啦", "jing2 jan3 gei1 mou5 zi2, ngo5 bong1 nei5 wun6 laa1", "【辦公室】影印機沒紙，我幫你換"],
+["工作場景 A 綜合", "喂，陳生公司，請問搵邊位？", "wai2, can4 saang1 gung1 si1, cing2 man6 wan2 bin1 wai2", "【電話】喂，陳先生公司，請問找哪位？"],
+["工作場景 A 綜合", "佢開緊會，我幫你留言", "keoi5 hoi1 gan2 wui2, ngo5 bong1 nei5 lau4 jin4", "【電話】他正在開會，我幫你留言"],
+["工作場景 A 綜合", "經理，我想請半日假", "ging1 lei5, ngo5 soeng2 cing2 bun3 jat6 gaa3", "【請假】經理，我想請半天假"],
+["工作場景 A 綜合", "好，你聽日返工之前話我知", "hou2, nei5 ting1 jat6 faan1 gung1 zi1 cin4 waa6 ngo5 zi1", "【請假】好，你明天上班前告訴我"],
+["工作場景 A 綜合", "個報告幾時交？", "go3 bou3 gou3 gei2 si4 gaau1", "【匯報】報告什麼時候交？"],
+["工作場景 A 綜合", "預計聽日完成", "jyu6 gai3 ting1 jat6 jyun4 sing4", "【匯報】預計明天完成"],
+["工作場景 A 綜合", "收工喇，下次輪到你請客", "sau1 gung1 laa3, haa6 ci3 leon4 dou3 nei5 ceng2 haak3", "【辦公室】下班了，下次輪到你請客"],
+["面試高頻 10 問", "請你介紹一下自己", "cing2 nei5 gaai3 siu6 jat1 haa5 zi6 gei2", "【Q1】請介紹一下自己"],
+["面試高頻 10 問", "你點解想應徵呢份工？", "nei5 dim2 gaai2 soeng2 jing3 zing1 ni1 fan6 gung1", "【Q2】你為什麼想應徵這份工作？"],
+["面試高頻 10 問", "你有咩優點同缺點？", "nei5 jau5 me1 jau1 dim2 tung4 kyut3 dim2", "【Q3】你有什麼優點和缺點？"],
+["面試高頻 10 問", "你點解離開上一份工？", "nei5 dim2 gaai2 lei4 hoi1 soeng6 jat1 fan6 gung1", "【Q4】你為什麼離開上一份工作？"],
+["面試高頻 10 問", "你有幾多年工作經驗？", "nei5 jau5 gei2 do1 nin4 gung1 zok3 ging1 jim6", "【Q5】你有幾年工作經驗？"],
+["面試高頻 10 問", "你期望嘅薪金係幾多？", "nei5 kei4 mong6 ge3 san1 gam1 hai6 gei2 do1", "【Q6】你期望的薪資是多少？"],
+["面試高頻 10 問", "你幾時可以上班？", "nei5 gei2 si4 ho2 ji5 soeng5 baan1", "【Q7】你什麼時候可以上班？"],
+["面試高頻 10 問", "你對我哋公司有咩認識？", "nei5 deoi3 ngo5 dei6 gung1 si1 jau5 me1 jing6 sik1", "【Q8】你對我們公司有什麼認識？"],
+["面試高頻 10 問", "你五年後想做咩？", "nei5 ng5 nin4 hau6 soeng2 zou6 me1", "【Q9】你五年後想做什麼？"],
+["面試高頻 10 問", "你仲有冇問題想問？", "nei5 zung6 jau5 mou5 man6 tai4 soeng2 man6", "【Q10】你還有什麼想問的？"],
+["面試自我介紹", "我叫陳大文，今年二十八歲", "ngo5 giu3 can4 daai6 man4, gam1 nin4 ji6 sap6 baat3 seoi3", "【自介】我叫陳大文，今年二十八歲"],
+["面試自我介紹", "我喺內地出世，而家喺香港住", "ngo5 hai2 noi6 dei6 ceot1 sai3, ji4 gaa1 hai2 hoeng1 gong2 zyu6", "【自介】我在內地出生，現在住在香港"],
+["面試自我介紹", "我畢業於中文大學", "ngo5 bat1 jip6 jyu1 zung1 man4 daai6 hok6", "【自介】我畢業於中文大學"],
+["面試自我介紹", "我讀嘅係工商管理", "ngo5 duk6 ge3 hai6 gung1 soeng1 gun2 lei5", "【自介】我讀的是工商管理"],
+["面試自我介紹", "我有三年相關嘅工作經驗", "ngo5 jau5 saam1 nin4 soeng1 gwaan1 ge3 gung1 zok3 ging1 jim6", "【自介】我有三年相關工作經驗"],
+["面試自我介紹", "我負責過客戶服務同埋銷售", "ngo5 fu6 zaak3 gwo3 haak3 wu6 fuk6 mou6 tung4 maai4 siu1 sau6", "【自介】我負責過客戶服務和銷售"],
+["面試自我介紹", "我嘅強項係溝通同埋學習能力", "ngo5 ge3 koeng4 hong6 hai6 kau1 tung1 tung4 maai4 hok6 zaap6 nang4 lik6", "【自介】我的強項是溝通和學習能力"],
+["面試自我介紹", "我習慣同團隊合作", "ngo5 zaap6 gwaan3 tung4 tyun4 deoi2 hap6 zok3", "【自介】我習慣與團隊合作"],
+["面試自我介紹", "我而家努力學緊廣東話", "ngo5 ji4 gaa1 nou5 lik6 hok6 gan2 gwong2 dung1 waa2", "【自介】我現在努力學廣東話"],
+["面試自我介紹", "多謝你畀我呢個機會", "do1 ze6 nei5 bei2 ngo5 ni1 go3 gei1 wui6", "【自介】謝謝你給我這個機會"],
+["職場正式口語", "請問你而家方唔方便？", "cing2 man6 nei5 ji4 gaa1 fong1 m4 fong1 bin6", "【正式】請問你現在方便嗎？"],
+["職場正式口語", "唔好意思打擾你", "m4 hou2 ji3 si1 daa2 jiu2 nei5", "【正式】不好意思打擾你"],
+["職場正式口語", "多謝你抽時間見我", "do1 ze6 nei5 cau1 si4 gaan3 gin3 ngo5", "【正式】謝謝你抽時間見我"],
+["職場正式口語", "麻煩你幫我睇一睇", "maa4 faan4 nei5 bong1 ngo5 tai2 jat1 tai2", "【正式】麻煩你幫我看一看"],
+["職場正式口語", "關於呢件事，我想跟進一下", "gwaan1 jyu1 ni1 gin6 si6, ngo5 soeng2 gan1 zeon3 jat1 haa5", "【正式】關於這件事，我想跟進一下"],
+["職場正式口語", "我稍後再覆你", "ngo5 saau2 hau6 zoi3 fuk1 nei5", "【正式】我稍後再回覆你"],
+["職場正式口語", "如有任何疑問，歡迎隨時聯絡我", "jyu4 jau5 jam6 ho4 ji4 man6, fun1 jing4 ceoi4 si4 lyun4 lok3 ngo5", "【正式】如有任何疑問，歡迎隨時聯絡我"],
+["職場正式口語", "多謝你嘅協助", "do1 ze6 nei5 ge3 hip3 zo6", "【正式】謝謝你的協助"],
+["職場正式口語", "明白，知悉", "ming4 baak6, zi1 sik1", "【正式】明白，知悉"],
+["職場正式口語", "請問可唔可以約個時間？", "cing2 man6 ho2 m4 ho2 ji5 joek3 go3 si4 gaan3", "【正式】請問可以約個時間嗎？"],
+["開會與發言", "我哋開始開會", "ngo5 dei6 hoi1 ci2 hoi1 wui2", "【開會】我們開始開會"],
+["開會與發言", "今日有三個議題", "gam1 jat6 jau5 saam1 go3 ji5 tai4", "【開會】今天有三個議題"],
+["開會與發言", "我想補充一下", "ngo5 soeng2 bou2 cung1 jat1 haa5", "【發言】我想補充一下"],
+["開會與發言", "我有個建議", "ngo5 jau5 go3 gin3 ji5", "【發言】我有個建議"],
+["開會與發言", "我同意你嘅睇法", "ngo5 tung4 ji3 nei5 ge3 tai2 faat3", "【發言】我同意你的看法"],
+["開會與發言", "我有少少保留", "ngo5 jau5 siu2 siu2 bou2 lau4", "【發言】我有一點保留"],
+["開會與發言", "可唔可以講詳細啲？", "ho2 m4 ho2 ji5 gong2 coeng4 sai3 di1", "【發言】可以說詳細一點嗎？"],
+["開會與發言", "下一個議題", "haa6 jat1 go3 ji5 tai4", "【開會】下一個議題"],
+["開會與發言", "總結一下", "zung2 git3 jat1 haa5", "【開會】總結一下"],
+["開會與發言", "我負責整理會議紀錄", "ngo5 fu6 zaak3 zing2 lei5 wui6 ji5 gei3 luk6", "【開會】我負責整理會議記錄"],
+["開會與發言", "今日就到呢度，散會", "gam1 jat6 zau6 dou3 ni1 dou6, saan3 wui2", "【開會】今天就到這裡，散會"],
+["入職與薪酬福利", "試用期係幾耐？", "si3 jung6 kei4 hai6 gei2 noi6", "【你問】試用期多長？"],
+["入職與薪酬福利", "月薪係幾多？", "jyut6 san1 hai6 gei2 do1", "【你問】月薪是多少？"],
+["入職與薪酬福利", "有幾多日年假？", "jau5 gei2 do1 jat6 nin4 gaa3", "【你問】有幾天年假？"],
+["入職與薪酬福利", "有冇強積金？", "jau5 mou5 koeng4 zik1 gam1", "【你問】有強積金嗎？（香港的退休金制度）"],
+["入職與薪酬福利", "有冇醫療保險？", "jau5 mou5 ji1 liu4 bou2 him2", "【你問】有醫療保險嗎？"],
+["入職與薪酬福利", "有冇雙糧？", "jau5 mou5 soeng1 loeng4", "【你問】有沒有雙糧（年終多發一個月薪）？"],
+["入職與薪酬福利", "有冇花紅？", "jau5 mou5 faa1 hung4", "【你問】有獎金嗎？"],
+["入職與薪酬福利", "幾時出糧？", "gei2 si4 ceot1 loeng4", "【你問】什麼時候發薪水？"],
+["入職與薪酬福利", "通知期係一個月", "tung1 zi1 kei4 hai6 jat1 go3 jyut6", "【合約】通知期是一個月"],
+["入職與薪酬福利", "我想睇下份合約", "ngo5 soeng2 tai2 haa5 fan6 hap6 joek3", "【你說】我想看看合約"],
+["入職與薪酬福利", "我幾時可以返工？", "ngo5 gei2 si4 ho2 ji5 faan1 gung1", "【你問】我什麼時候可以上班？"],
+["模擬面試", "你好，請坐", "nei5 hou2, cing2 co5", "【面試官】你好，請坐"],
+["模擬面試", "你好，我係陳大文，多謝你畀我呢個機會", "nei5 hou2, ngo5 hai6 can4 daai6 man4, do1 ze6 nei5 bei2 ngo5 ni1 go3 gei1 wui6", "【你答】你好，我是陳大文，謝謝你給我機會"],
+["模擬面試", "先介紹一下你自己啦", "sin1 gaai3 siu6 jat1 haa5 nei5 zi6 gei2 laa1", "【面試官】先介紹一下自己吧"],
+["模擬面試", "你點解想嚟我哋公司工作？", "nei5 dim2 gaai2 soeng2 lai4 ngo5 dei6 gung1 si1 gung1 zok3", "【面試官】你為什麼想來我們公司？"],
+["模擬面試", "因為貴公司發展好，我想學多啲嘢", "jan1 wai6 gwai3 gung1 si1 faat3 zin2 hou2, ngo5 soeng2 hok6 do1 di1 je5", "【你答】因為貴公司發展好，我想多學一點"],
+["模擬面試", "你有咩強項？", "nei5 jau5 me1 koeng4 hong6", "【面試官】你有什麼強項？"],
+["模擬面試", "我溝通能力強，做嘢好認真", "ngo5 kau1 tung1 nang4 lik6 koeng4, zou6 je5 hou2 jing6 zan1", "【你答】我溝通能力強，做事很認真"],
+["模擬面試", "你期望嘅薪金係幾多？", "nei5 kei4 mong6 ge3 san1 gam1 hai6 gei2 do1", "【面試官】你期望的薪資是多少？"],
+["模擬面試", "我想按公司嘅標準，希望可以傾下", "ngo5 soeng2 on3 gung1 si1 ge3 biu1 zeon2, hei1 mong6 ho2 ji5 king1 haa5", "【你答】我按公司標準，希望可以談談"],
+["模擬面試", "你有冇問題想問我哋？", "nei5 jau5 mou5 man6 tai4 soeng2 man6 ngo5 dei6", "【面試官】你有什麼想問我們？"],
+["模擬面試", "請問呢個職位嘅工作時間係點樣？", "cing2 man6 ni1 go3 zik1 wai2 ge3 gung1 zok3 si4 gaan3 hai6 dim2 joeng2", "【你問】請問這個職位的工作時間如何？"],
+["模擬面試", "我哋一個星期內通知你", "ngo5 dei6 jat1 go3 sing1 kei4 noi6 tung1 zi1 nei5", "【面試官】一週內通知你"],
+["模擬面試", "多謝你，期待你嘅消息", "do1 ze6 nei5, kei4 doi6 nei5 ge3 siu1 sik1", "【你答】謝謝，期待你的消息"],
+["檢測：20 分鐘全真面試", "請你用廣東話介紹一下你自己", "cing2 nei5 jung6 gwong2 dung1 waa2 gaai3 siu6 jat1 haa5 nei5 zi6 gei2", "【題目 1】用廣東話自我介紹"],
+["檢測：20 分鐘全真面試", "講下你上一份工作做啲咩", "gong2 haa5 nei5 soeng6 jat1 fan6 gung1 zok3 zou6 di1 me1", "【題目 2】說說上一份工作做什麼"],
+["檢測：20 分鐘全真面試", "你最大嘅成就係咩？", "nei5 zeoi3 daai6 ge3 sing4 zau6 hai6 me1", "【題目 3】你最大的成就是什麼？"],
+["檢測：20 分鐘全真面試", "你點樣處理同事之間嘅分歧？", "nei5 dim2 joeng2 cyu2 lei5 tung4 si6 zi1 gaan1 ge3 fan1 kei4", "【題目 4】你怎麼處理同事之間的分歧？"],
+["檢測：20 分鐘全真面試", "你試過壓力好大嘅時候嗎？", "nei5 si3 gwo3 aat3 lik6 hou2 daai6 ge3 si4 hau6 maa3", "【題目 5】你有壓力很大的時候嗎？"],
+["檢測：20 分鐘全真面試", "你點樣安排時間？", "nei5 dim2 joeng2 on1 paai4 si4 gaan3", "【題目 6】你怎麼安排時間？"],
+["檢測：20 分鐘全真面試", "你點解覺得自己適合呢個職位？", "nei5 dim2 gaai2 gok3 dak1 zi6 gei2 sik1 hap6 ni1 go3 zik1 wai2", "【題目 7】為什麼覺得自己適合這職位？"],
+["檢測：20 分鐘全真面試", "你願唔願意加班？", "nei5 jyun6 m4 jyun6 ji3 gaa1 baan1", "【題目 8】你願不願意加班？"],
+["檢測：20 分鐘全真面試", "你有冇其他公司嘅錄取通知？", "nei5 jau5 mou5 kei4 taa1 gung1 si1 ge3 luk6 ceoi2 tung1 zi1", "【題目 9】你有沒有其他公司的錄取通知？"],
+["檢測：20 分鐘全真面試", "你有咩想問我哋？", "nei5 jau5 me1 soeng2 man6 ngo5 dei6", "【題目 10】你有什麼想問我們？"],
+["場景總複習（一）日常", "唔該，一杯熱奶茶，少甜", "m4 goi1, jat1 bui1 jit6 naai5 caa4, siu2 tim4", "【茶餐廳】麻煩，一杯熱奶茶，少糖"],
+["場景總複習（一）日常", "呢件有冇細碼？", "ni1 gin6 jau5 mou5 sai3 maa5", "【購物】這件有小號嗎？"],
+["場景總複習（一）日常", "我用八達通", "ngo5 jung6 baat3 daat6 tung1", "【付款】我用八達通"],
+["場景總複習（一）日常", "請問地鐵站點行？", "cing2 man6 dei6 tit3 zaam6 dim2 haang4", "【問路】請問地鐵站怎麼走？"],
+["場景總複習（一）日常", "唔該，前面有落", "m4 goi1, cin4 min6 jau5 lok6", "【小巴】麻煩，前面下車"],
+["場景總複習（一）日常", "今日好熱，落唔落雨呀？", "gam1 jat6 hou2 jit6, lok6 m4 lok6 jyu5 aa3", "【天氣】今天很熱，會下雨嗎？"],
+["場景總複習（一）日常", "我想叫外賣", "ngo5 soeng2 giu3 ngoi6 maai6", "【外賣】我想叫外賣"],
+["場景總複習（一）日常", "兩位，有冇位？", "loeng5 wai2, jau5 mou5 wai2", "【飲茶】兩位，有位子嗎？"],
+["場景總複習（一）日常", "你嘅電話幾多號？", "nei5 ge3 din6 waa2 gei2 do1 hou6", "【社交】你的電話是多少？"],
+["場景總複習（一）日常", "今晚有冇空？一齊食飯", "gam1 maan5 jau5 mou5 hung1? jat1 cai4 sik6 faan6", "【社交】今晚有空嗎？一起吃飯"],
+["場景總複習（二）服務與求助", "我想睇醫生，我發燒", "ngo5 soeng2 tai2 ji1 sang1, ngo5 faat3 siu1", "【求醫】我想看醫生，我發燒"],
+["場景總複習（二）服務與求助", "我對盤尼西林敏感", "ngo5 deoi3 pun4 nei4 sai1 lam4 man5 gam2", "【求醫】我對盤尼西林過敏"],
+["場景總複習（二）服務與求助", "剪短啲，唔該", "zin2 dyun2 di1, m4 goi1", "【理髮】麻煩剪短一點"],
+["場景總複習（二）服務與求助", "我想開銀行戶口", "ngo5 soeng2 hoi1 ngan4 hong4 wu6 hau2", "【銀行】我想開銀行帳戶"],
+["場景總複習（二）服務與求助", "我想租屋，預算一萬蚊", "ngo5 soeng2 zou1 uk1, jyu6 syun3 jat1 maan6 man1", "【租屋】我想租房子，預算一萬塊"],
+["場景總複習（二）服務與求助", "冷氣壞咗，可唔可以維修？", "laang5 hei3 waai6 zo2, ho2 m4 ho2 ji5 wai4 sau1", "【家居】冷氣壞了，可以維修嗎？"],
+["場景總複習（二）服務與求助", "救命呀！", "gau3 meng6 aa3", "【緊急】救命！"],
+["場景總複習（二）服務與求助", "唔該，幫我叫救護車", "m4 goi1, bong1 ngo5 giu3 gau3 wu6 ce1", "【緊急】麻煩幫我叫救護車"],
+["場景總複習（二）服務與求助", "我唔見咗銀包", "ngo5 m4 gin3 zo2 ngan4 baau1", "【報失】我的錢包不見了"],
+["場景總複習（二）服務與求助", "我想報警", "ngo5 soeng2 bou3 ging2", "【報警】我想報警"],
+["終極檢測：30 分鐘全粵語對話", "請用廣東話介紹你自己同你嘅家人", "cing2 jung6 gwong2 dung1 waa2 gaai3 siu6 nei5 zi6 gei2 tung4 nei5 ge3 gaa1 jan4", "【題目 1】用廣東話介紹自己和家人"],
+["終極檢測：30 分鐘全粵語對話", "描述一下你平時嘅一日", "miu4 seot6 jat1 haa5 nei5 ping4 si4 ge3 jat1 jat6", "【題目 2】描述你平常的一天"],
+["終極檢測：30 分鐘全粵語對話", "扮演：喺茶餐廳點餐，要求少甜", "baan6 jin2: hai2 caa4 caan1 teng1 dim2 caan1, jiu1 kau4 siu2 tim4", "【題目 3】角色扮演：茶餐廳點餐"],
+["終極檢測：30 分鐘全粵語對話", "扮演：向路人問路去地鐵站", "baan6 jin2: hoeng3 lou6 jan4 man6 lou6 heoi3 dei6 tit3 zaam6", "【題目 4】角色扮演：問路"],
+["終極檢測：30 分鐘全粵語對話", "扮演：向醫生說明病情", "baan6 jin2: hoeng3 ji1 sang1 syut3 ming4 beng6 cing4", "【題目 5】角色扮演：向醫生說明病情"],
+["終極檢測：30 分鐘全粵語對話", "扮演：去銀行辦理業務", "baan6 jin2: heoi3 ngan4 hong4 baan6 lei5 jip6 mou6", "【題目 6】角色扮演：銀行辦事"],
+["終極檢測：30 分鐘全粵語對話", "扮演：約朋友出街，同埋改期", "baan6 jin2: joek3 pang4 jau5 ceot1 gaai1, tung4 maai4 goi2 kei4", "【題目 7】角色扮演：約朋友與改期"],
+["終極檢測：30 分鐘全粵語對話", "講下你上星期做過嘅事", "gong2 haa5 nei5 soeng6 sing1 kei4 zou6 gwo3 ge3 si6", "【題目 8】說說上週做過的事"],
+["終極檢測：30 分鐘全粵語對話", "講下你對香港嘅睇法", "gong2 haa5 nei5 deoi3 hoeng1 gong2 ge3 tai2 faat3", "【題目 9】說說你對香港的看法"],
+["終極檢測：30 分鐘全粵語對話", "扮演：面試，介紹自己同強項", "baan6 jin2: min6 si3, gaai3 siu6 zi6 gei2 tung4 koeng4 hong6", "【題目 10】角色扮演：面試"],
+["聲母（一）和普通話接近", "包", "baau1", "b-：不送氣。麵包"],
+["聲母（一）和普通話接近", "布", "bou3", "b-：不送氣。布"],
+["聲母（一）和普通話接近", "皮", "pei4", "p-：送氣。皮"],
+["聲母（一）和普通話接近", "盤", "pun4", "p-：送氣。盤子"],
+["聲母（一）和普通話接近", "米", "mai5", "m-。米"],
+["聲母（一）和普通話接近", "貓", "maau1", "m-。貓"],
+["聲母（一）和普通話接近", "飛", "fei1", "f-。飛"],
+["聲母（一）和普通話接近", "飯", "faan6", "f-。飯"],
+["聲母（一）和普通話接近", "刀", "dou1", "d-：不送氣。刀"],
+["聲母（一）和普通話接近", "豆", "dau6", "d-：不送氣。豆"],
+["聲母（一）和普通話接近", "糖", "tong4", "t-：送氣。糖"],
+["聲母（一）和普通話接近", "天", "tin1", "t-：送氣。天"],
+["聲母（一）和普通話接近", "男", "naam4", "n-。男"],
+["聲母（一）和普通話接近", "腦", "nou5", "n-。腦"],
+["聲母（一）和普通話接近", "來", "loi4", "l-。來"],
+["聲母（一）和普通話接近", "路", "lou6", "l-。路"],
+["聲母（一）和普通話接近", "高", "gou1", "g-：不送氣。高"],
+["聲母（一）和普通話接近", "金", "gam1", "g-：不送氣。金"],
+["聲母（一）和普通話接近", "球", "kau4", "k-：送氣。球"],
+["聲母（一）和普通話接近", "近", "kan5", "k-：送氣。近"],
+["聲母（一）和普通話接近", "海", "hoi2", "h-。海"],
+["聲母（一）和普通話接近", "紅", "hung4", "h-。紅"],
+["聲母（二）粵語特有：ng、gw、kw", "眼", "ngaan5", "ng-。眼睛"],
+["聲母（二）粵語特有：ng、gw、kw", "牛", "ngau4", "ng-。牛"],
+["聲母（二）粵語特有：ng、gw、kw", "鬼", "gwai2", "gw-：嘴先圓再發音。鬼"],
+["聲母（二）粵語特有：ng、gw、kw", "關", "gwaan1", "gw-：嘴先圓再發音。關"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "又", "jau6", "j-：像英語 y。又"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "夜", "je6", "j-：像英語 y。夜晚"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "黃", "wong4", "w-。黃色"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "回", "wui4", "w-。回"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "做", "zou6", "z-：不捲舌。做"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "坐", "zo6", "z-：不捲舌。坐"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "菜", "coi3", "c-：送氣，不捲舌。菜"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "村", "cyun1", "c-：送氣，不捲舌。村"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "手", "sau2", "s-：不捲舌。手"],
+["聲母（三）易受普通話影響：j、w、z、c、s", "西", "sai1", "s-：不捲舌。西"],
+["韻母（一）aa 系", "馬", "maa5", "aa。馬"],
+["韻母（一）aa 系", "買", "maai5", "aai。買"],
+["韻母（一）aa 系", "鬧", "naau6", "aau。吵鬧"],
+["韻母（一）aa 系", "膽", "daam2", "aam。膽"],
+["韻母（一）aa 系", "晚", "maan5", "aan。晚"],
+["韻母（一）aa 系", "生", "saang1", "aang。生"],
+["韻母（一）aa 系", "發", "faat3", "aat：收尾 -t 短促。發"],
+["韻母（一）aa 系", "白", "baak6", "aak：收尾 -k 短促。白"],
+["韻母（二）短 a 系", "林", "lam4", "am：短 a。林"],
+["韻母（二）短 a 系", "根", "gan1", "an：短 a。根"],
+["韻母（二）短 a 系", "弟", "dai6", "ai。弟弟"],
+["韻母（二）短 a 系", "口", "hau2", "au。口"],
+["韻母（二）短 a 系", "朋", "pang4", "ang。朋友"],
+["韻母（二）短 a 系", "急", "gap1", "ap：收尾 -p 短促。急"],
+["韻母（二）短 a 系", "七", "cat1", "at：短 a，收尾 -t 短促。七"],
+["韻母（二）短 a 系", "黑", "hak1", "ak：短 a，收尾 -k 短促。黑"],
+["韻母（三）e、i 系", "蛇", "se4", "e。蛇"],
+["韻母（三）e、i 系", "美", "mei5", "ei。美"],
+["韻母（三）e、i 系", "病", "beng6", "eng。病"],
+["韻母（三）e、i 系", "石", "sek6", "ek：收尾 -k 短促。石頭"],
+["韻母（三）e、i 系", "子", "zi2", "i。兒子"],
+["韻母（三）e、i 系", "叫", "giu3", "iu。叫"],
+["韻母（三）e、i 系", "甜", "tim4", "im。甜"],
+["韻母（三）e、i 系", "面", "min6", "in。面"],
+["韻母（三）e、i 系", "明", "ming4", "ing。明天的明"],
+["韻母（三）e、i 系", "接", "zip3", "ip：收尾 -p 短促。接"],
+["韻母（三）e、i 系", "結", "git3", "it：收尾 -t 短促。結"],
+["韻母（三）e、i 系", "力", "lik6", "ik：收尾 -k 短促。力"],
+["韻母（四）o、u 系", "初", "co1", "o。初"],
+["韻母（四）o、u 系", "愛", "oi3", "oi。愛"],
+["韻母（四）o、u 系", "安", "on1", "on。安"],
+["韻母（四）o、u 系", "忙", "mong4", "ong。忙"],
+["韻母（四）o、u 系", "割", "got3", "ot：收尾 -t 短促。割"],
+["韻母（四）o、u 系", "學", "hok6", "ok：收尾 -k 短促。學"],
+["韻母（四）o、u 系", "毛", "mou4", "ou。毛"],
+["韻母（四）o、u 系", "古", "gu2", "u。古"],
+["韻母（四）o、u 系", "煤", "mui4", "ui。煤"],
+["韻母（四）o、u 系", "半", "bun3", "un。半"],
+["韻母（四）o、u 系", "中", "zung1", "ung。中"],
+["韻母（四）o、u 系", "闊", "fut3", "ut：收尾 -t 短促。闊"],
+["韻母（四）o、u 系", "六", "luk6", "uk：收尾 -k 短促。六"],
+["韻母（五）圓唇韻 oe、eo", "鋸", "goe3", "oe：嘴半圓。鋸"],
+["韻母（五）圓唇韻 oe、eo", "兩", "loeng5", "oeng。兩"],
+["韻母（五）圓唇韻 oe、eo", "腳", "goek3", "oek：收尾 -k 短促。腳"],
+["韻母（五）圓唇韻 oe、eo", "去", "heoi3", "eoi：粵語特有。去"],
+["韻母（五）圓唇韻 oe、eo", "順", "seon6", "eon。順"],
+["韻母（六）yu 系與 m、ng", "書", "syu1", "yu：嘴圓，像普通話 ü。書"],
+["韻母（六）yu 系與 m、ng", "圓", "jyun4", "yun。圓"],
+["韻母（六）yu 系與 m、ng", "血", "hyut3", "yut：收尾 -t 短促。血"],
+["韻母（六）yu 系與 m、ng", "吳", "ng4", "ng：單獨成音節。吳（姓）"]
+];
+const PLAN=[
+["發音課程",["粵拼入門","聲母（一）和普通話接近","聲母（二）粵語特有：ng、gw、kw","聲母（三）易受普通話影響：j、w、z、c、s","韻母（一）aa 系","韻母（二）短 a 系","韻母（三）e、i 系","韻母（四）o、u 系","韻母（五）圓唇韻 oe、eo","韻母（六）yu 系與 m、ng","聲調","入聲","音節拼讀（一）o 韻","音節拼讀（二）aa 韻","最小對立對（一）聲調","最小對立對（二）長短 a、圓唇、n/l","最小對立對（三）入聲、送氣、z c s"],"聲母、韻母、聲調三大塊。先學這一課，後面所有課都靠它。"],
+["開口破冰",["問候","自介","數字","數字進階","時間","日期","普粵對照（一）常用字詞","普粵對照（二）語法與句型","檢測：1 分鐘自我介紹"],"問候、自我介紹、數字、時間、日期，加上普通話母語者最容易直譯出錯的說法。"],
+["基礎詞彙與句型",["代詞指示","疑問詞","常用動詞","形容詞","稱呼身份","常用句型","語氣詞","連接詞","綜合句子"],"代詞、疑問詞、動詞、形容詞、常用句型，加上語氣詞和連接詞，是所有場景課的共同基礎。"],
+["食：飲食與用餐",["飲食基礎","用餐（一）茶餐廳點餐","用餐（二）茶餐廳術語","飲茶點心","外賣與送餐","街市與超市"],"每天都要吃。從點茶餐廳、飲茶到買餸，是使用頻率最高的一組。"],
+["買：購物、付款與通訊",["購物","付款與八達通","打電話","手機與網絡","檢測：購物全流程"],"買東西、付錢、打電話和上網，是生活裡第二高頻的一組。"],
+["行：方位與出行",["方位","問路","出行（地鐵、巴士、的士）","交通補充：輕鐵、渡輪、機場"],"問路、搭車、去機場，出門必備。"],
+["聊：社交與日常聊天",["見面","天氣","約朋友與社交","描述經過","描述計劃與看法","精聽訓練","閒聊綜合","場景 A 綜合","檢測：10 分鐘自由聊天"],"和人聊天、約人，並練習把話說得更像本地人。"],
+["住：求助、看病與辦事",["緊急求助","求醫","藥房與牙醫","理髮","辦事（銀行、電話卡、速遞）","租屋與住宿","家居與大廈","場景 B 綜合","檢測：求醫角色扮演"],"不是天天用，但用到時一定要聽得懂、說得出。緊急求助建議最先學。"],
+["玩：休閒與出遊",["景點","娛樂","運動場","圖書館使用"],"出遊與休閒，難度較低，使用頻率不高。"],
+["工作場景 A：辦公室日常",["辦公室問候與閒聊","辦公室設備與文具","午餐與同事聚餐","工作電話與留言","請假、遲到與加班","簡單匯報進度","工作場景 A 綜合"],"高頻、較易，辦公室每天都會用到。"],
+["工作場景 B：面試與正式場合",["面試高頻 10 問","面試自我介紹","職場正式口語","開會與發言","入職與薪酬福利","模擬面試","檢測：20 分鐘全真面試"],"正式、較難，需要真人反饋反覆模擬。"],
+["整合與檢測",["場景總複習（一）日常","場景總複習（二）服務與求助","終極檢測：30 分鐘全粵語對話"],"把學過的場景串起來複習，並做最終檢測。"]
+];
+const FLAT=PLAN.flatMap(c=>c[1]);
+let openSet=new Set(),lastK=null;
+try{openSet=new Set(JSON.parse(localStorage.getItem("yue-open")||"[]"))}catch(e){}
+if(openSet.size>1)openSet=new Set([[...openSet][0]]);
+let cat=null,slow=false,voice=null,recs={},cur=null,done=new Set(),ev={},mode=null,rl=[],sr=[];
+const DAY=864e5,INT=[1,3,7,14,30,60];
+function rebuild(){done=new Set();for(const k in ev)if(ev[k][0]===1)done.add(+k)}
+function cleanEv(o){const r={};if(o&&typeof o==="object")for(const k in o){const i=+k,v=o[k];if(Number.isInteger(i)&&i>=0&&i<D.length&&Array.isArray(v)&&(v[0]===0||v[0]===1)){const ts=+v[1]||0,st=Math.min(5,Math.max(0,+v[2]||0));r[i]=[v[0],ts,st,+v[3]||ts+DAY*INT[st]]}}return r}
+function mergeEv(a,b){const r={};for(const k of new Set([...Object.keys(a),...Object.keys(b)])){const x=a[k],y=b[k];r[k]=!x?y:!y?x:(y[1]>x[1]||(y[1]===x[1]&&y[0]>x[0]))?y:x}return r}
+function evEq(a,b){const ka=Object.keys(a),kb=Object.keys(b);return ka.length===kb.length&&ka.every(k=>b[k]&&b[k][0]===a[k][0]&&b[k][1]===a[k][1]&&b[k][2]===a[k][2])}
+function syncEv(){const n=Date.now();done.forEach(i=>{if(!ev[i]||ev[i][0]!==1)ev[i]=[1,n,0,n+DAY]});for(const k in ev)if(ev[k][0]===1&&!done.has(+k))ev[k]=[0,n,0,n]}
+try{ev=cleanEv(JSON.parse(localStorage.getItem("yue-w1-ev")||"{}"))}catch(e){}
+try{const old=JSON.parse(localStorage.getItem("yue-w1")||"[]"),n0=Date.now();if(Array.isArray(old))old.forEach(i=>{if(Number.isInteger(i)&&i>=0&&i<D.length&&!ev[i])ev[i]=[1,n0,0,n0+DAY]})}catch(e){}
+rebuild();
+const $=s=>document.querySelector(s);
+function jp(s){return s.replace(/([a-z]+)([1-6])/g,'$1<b class="t$2">$2</b>')}
+let lastT=0,ref=null,busy=false,again=false;
+function setSync(t){const e=$("#sync");if(e)e.textContent=t}
+function persist(){try{localStorage.setItem("yue-w1",JSON.stringify([...done]));localStorage.setItem("yue-w1-ev",JSON.stringify(ev));localStorage.setItem("yue-w1-t",String(lastT))}catch(e){}}
+function save(){lastT=Date.now();rebuild();persist();push()}
+function refresh(){if(cat||mode)render();else home()}
+function dueList(){const n=Date.now();return Object.keys(ev).filter(k=>ev[k][0]===1&&ev[k][3]<=n).sort((a,b)=>ev[a][3]-ev[b][3]).map(Number)}
+async function push(){
+  if(window.cfPush)window.cfPush(ev,lastT);
+  if(!ref)return;
+  if(busy){again=true;return}
+  busy=true;
+  try{
+    do{again=false;await ref.set({done:[...done],t:lastT||Date.now()})}while(again);
+    setSync("雲端已同步");
+  }catch(e){setSync("雲端同步失敗，進度仍保存在本機")}
+  busy=false;
+}
+async function initCloud(){
+  try{
+    if(!window.claude||!window.claude.use){setSync("");return}
+    const user=await window.claude.use("user"),db=await window.claude.use("db");
+    if(!user||!db){setSync("");return}
+    const uid=await user.id();
+    if(!uid){setSync("");return}
+    const r=db.doc("data/users/"+uid+"/profile");
+    const snap=await r.get();
+    let lt=0;try{lt=+localStorage.getItem("yue-w1-t")||0}catch(e){}
+    let needPush=true;
+    if(snap.exists){
+      const d=snap.data()||{},rd=Array.isArray(d.done)?d.done.filter(n=>Number.isInteger(n)):[],rt=+d.t||0;
+      if(!lt){done=new Set([...done,...rd])}
+      else if(rt>lt){done=new Set(rd)}
+      needPush=done.size!==rd.length||rd.some(n=>!done.has(n));
+    }
+    syncEv();
+    ref=r;
+    if(needPush){lastT=Date.now();try{localStorage.setItem("yue-w1",JSON.stringify([...done]));localStorage.setItem("yue-w1-t",String(lastT))}catch(e){}await push()}
+    else{setSync("雲端已同步")}
+    if(cat)render();else home();
+  }catch(e){setSync("")}
+}
+function pickVoice(){
+  const vs=speechSynthesis.getVoices();
+  voice=vs.find(v=>/^(zh[-_]hk|yue)/i.test(v.lang))||vs.find(v=>/cantonese|粵|粤|sin-?ji/i.test(v.name))||null;
+}
+function warnNoVoice(){
+  const w=$("#warn");
+  if(!voice&&speechSynthesis.getVoices().length){w.hidden=false;w.textContent="這台設備沒有找到粵語語音，部分發音可能會變成普通話。請改用「粵典」聽真人發音，或在手機／系統設置裡添加粵語（香港）語音。"}
+}
+function ttsText(t){return t.replace(/\.{3}|…+/g,"").replace(/、/g,"，").trim()}
+function fnv(s){const b=new TextEncoder().encode(s);let h=0x811c9dc5;for(const x of b){h^=x;h=Math.imul(h,0x01000193)>>>0}return h.toString(16).padStart(8,"0")}
+let au=null;
+let pb=null;
+function markPlay(b){clearPlay();if(!b)return;pb=b;b.classList.add("playing");const c=b.closest(".card");if(c)c.classList.add("playing-card")}
+function clearPlay(){if(pb){pb.classList.remove("playing");const c=pb.closest(".card");if(c)c.classList.remove("playing-card");pb=null}}
+function stopAll(){
+  clearPlay();sysU=null;spTok++;
+  if(au){au.onerror=null;au.onended=null;au.pause();au=null}
+  if("speechSynthesis" in window&&(speechSynthesis.speaking||speechSynthesis.pending))speechSynthesis.cancel();
+}
+let sysU=null;
+function speakSys(t,cb){
+  if(!("speechSynthesis" in window)){alert("此瀏覽器不支持語音合成，請用「粵典」。");return}
+  warnNoVoice();
+  const was=speechSynthesis.speaking||speechSynthesis.pending;
+  if(was)speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(ttsText(t));
+  u.lang="zh-HK";if(voice)u.voice=voice;u.rate=slow?0.55:0.85;
+  if(cb)u.onend=cb;
+  sysU=u;
+  const go=()=>{if(sysU!==u)return;try{speechSynthesis.resume()}catch(e){}speechSynthesis.speak(u)};
+  was?setTimeout(go,120):go();
+}
+const PK={"53dae589":[0,0,17054],"a42fa346":[0,17054,17054],"7b63184e":[0,34108,17054],"9e00e44b":[0,51162,17054],"26d6cd1b":[0,68216,17054],"41fa8206":[0,85270,17054],"dcddc496":[0,102324,17054],"556fce3f":[0,119378,17054],"256ed718":[0,136432,17054],"ba26672c":[0,153486,17054],"96e07738":[0,170540,17054],"273fdf83":[0,187594,17054],"c926e329":[0,204648,17054],"f9a4f74c":[0,221702,17054],"7481482d":[0,238756,17054],"80d4e4fd":[0,255810,17054],"14a47636":[0,272864,17054],"f0efd8ca":[0,289918,17054],"c204f179":[0,306972,17054],"4388dbe2":[0,324026,17054],"9ad98b19":[0,341080,17054],"113f114a":[0,358134,17054],"1f4c9ede":[0,375188,17054],"6f78839c":[0,392242,17054],"c71119b4":[0,409296,17054],"4e5dce82":[0,426350,17054],"fd7d7cda":[0,443404,17054],"fab59669":[0,460458,17054],"17052f54":[0,477512,17054],"18b7f666":[0,494566,17054],"9e3cc96a":[0,511620,17054],"33803643":[0,528674,17054],"0d0c2064":[0,545728,17054],"bf4fb385":[0,562782,17054],"4bdad8f1":[0,579836,17054],"3e8456d5":[0,596890,17054],"a11e0d78":[0,613944,17054],"fcbfe1e2":[0,630998,17054],"1dc575cf":[0,648052,17054],"28d17047":[0,665106,17054],"94469b48":[0,682160,17054],"36188436":[0,699214,17054],"612a74ab":[0,716268,17054],"d44986bc":[0,733322,17054],"98cd0109":[0,750376,17054],"1c3aed8a":[0,767430,17054],"91d8d157":[0,784484,17054],"3c50c069":[0,801538,17054],"afa198a0":[0,818592,17054],"9bcd05c2":[0,835646,17054],"2e5d9c22":[0,852700,17054],"8d469043":[0,869754,17054],"1859a7e9":[0,886808,17054],"98ae328a":[0,903862,17054],"5c8076ce":[0,920916,17054],"c9042b17":[0,937970,17054],"bb1583fe":[0,955024,17054],"f015d76d":[0,972078,17054],"682e993b":[1,0,17054],"f749bdd5":[1,17054,14606],"66b5fb64":[1,31660,17054],"f3500561":[1,48714,17054],"0981d2a3":[1,65768,17054],"22f67fa2":[1,82822,17054],"4f2ef7a7":[1,99876,17054],"abc052ff":[1,116930,17054],"296edd64":[1,133984,17054],"02050e45":[1,151038,17054],"4c851876":[1,168092,17054],"f6bc06d9":[1,185146,17054],"9d10d796":[1,202200,17054],"10bc2fc7":[1,219254,17054],"0b233184":[1,236308,17054],"0c184218":[1,253362,17054],"664064fd":[1,270416,17054],"12f3dfe7":[1,287470,17054],"40fbd4b6":[1,304524,17054],"921978ad":[1,321578,14318],"7008a59d":[1,335896,17054],"454d22cd":[1,352950,17054],"b867f583":[1,370004,17054],"9110c4b2":[1,387058,17054],"fdbfe375":[1,404112,17054],"554027ed":[1,421166,17054],"4d624a1d":[1,438220,17054],"5cdaf3b4":[1,455274,17054],"49b1fc26":[1,472328,17054],"1329963e":[1,489382,17054],"363ff720":[1,506436,17054],"7751431a":[1,523490,17054],"8a00c4cf":[1,540544,17054],"71dbc05a":[1,557598,17054],"3a869cf4":[1,574652,17054],"fe008acb":[1,591706,17054],"283f357f":[1,608760,17054],"aad0e122":[1,625814,17054],"a21a3d74":[1,642868,13886],"d9046a17":[1,656754,17054],"7fc76be0":[1,673808,17054],"0b931eea":[1,690862,17054],"ddde71c0":[1,707916,17054],"88049340":[1,724970,17054],"2e0c5457":[1,742024,17054],"366b2044":[1,759078,17054],"7b1dd1a6":[1,776132,17054],"eb165555":[1,793186,17054],"b726c6d3":[1,810240,17054],"08a46352":[1,827294,17054],"06deb24b":[1,844348,17054],"5c59a508":[1,861402,17054],"6e75b309":[1,878456,21806],"36e24993":[1,900262,18350],"2ee251e7":[1,918612,17918],"c39d689d":[1,936530,18206],"31b0c0e9":[1,954736,18062],"732b64d0":[1,972798,24686],"65aee67a":[2,0,18926],"c9421759":[2,18926,18638],"94aa4ce4":[2,37564,17054],"10917192":[2,54618,17774],"5c55a3db":[2,72392,16478],"d7970ce7":[2,88870,18062],"7a269ea8":[2,106932,17486],"d060afe8":[2,124418,18062],"04cbc090":[2,142480,16910],"bc3fecba":[2,159390,17198],"7a05d1ce":[2,176588,17342],"1efba79a":[2,193930,17486],"bf133120":[2,211416,17342],"032764c7":[2,228758,17342],"337d4f46":[2,246100,17342],"da272f7a":[2,263442,21230],"6cb64586":[2,284672,21950],"86938da3":[2,306622,17054],"004b9a5c":[2,323676,17054],"d2dc4dec":[2,340730,16334],"fd3ef46b":[2,357064,17054],"cf835851":[2,374118,17054],"e5c0098a":[2,391172,17054],"6d89234d":[2,408226,17054],"6eaffa70":[2,425280,17054],"14dbcb1b":[2,442334,17054],"fbc2a8ed":[2,459388,17054],"09d52a61":[2,476442,17054],"22fd10de":[2,493496,21806],"c37d9643":[2,515302,18350],"3d400225":[2,533652,17054],"d2498396":[2,550706,17054],"8e4691d6":[2,567760,17054],"4c43eb59":[2,584814,17054],"b213710f":[2,601868,17054],"638f1a72":[2,618922,17054],"a97b8891":[2,635976,17054],"6450ff61":[2,653030,17054],"664e419a":[2,670084,17054],"c02fcf5a":[2,687138,17054],"873d017d":[2,704192,17054],"eeeb46a8":[2,721246,17054],"1f799583":[2,738300,17054],"5452a98a":[2,755354,17054],"76e2f6bc":[2,772408,17054],"c5497bfe":[2,789462,17054],"cba708a0":[2,806516,17054],"d9064d2c":[2,823570,17054],"c5726295":[2,840624,17054],"d429e894":[2,857678,17054],"d7be808a":[2,874732,17054],"b89091e1":[2,891786,17054],"797b735f":[2,908840,17054],"b59085c6":[2,925894,17630],"830dec65":[2,943524,17054],"e7db4381":[2,960578,17054],"f38be443":[2,977632,17054],"9f77be5a":[3,0,17054],"87c2a306":[3,17054,16190],"b2972b27":[3,33244,17054],"6cdbf45a":[3,50298,17918],"98bb43e2":[3,68216,17054],"a1d20b2c":[3,85270,17054],"97ec201f":[3,102324,17054],"28fcaf5f":[3,119378,17054],"e7b6c9a7":[3,136432,17630],"d7c59f27":[3,154062,17054],"3b8595bd":[3,171116,17054],"7ac0a627":[3,188170,17054],"82df736a":[3,205224,17054],"be6e07aa":[3,222278,17342],"f5b0ba28":[3,239620,17054],"4fa02f0e":[3,256674,17054],"3c60adbc":[3,273728,17054],"f7447829":[3,290782,17054],"263aeda0":[3,307836,17054],"17dceae6":[3,324890,17054],"4c3a9373":[3,341944,17054],"7a0b9303":[3,358998,17054],"36048a20":[3,376052,17054],"304d9f22":[3,393106,18062],"5a9ec1d2":[3,411168,18062],"8b74ec43":[3,429230,17630],"ca70687d":[3,446860,17054],"53743aa6":[3,463914,17054],"664faee1":[3,480968,17774],"a15e4970":[3,498742,20654],"354cf90c":[3,519396,17630],"9d93d919":[3,537026,20798],"03c4219b":[3,557824,19070],"61ca6080":[3,576894,27710],"410e5f0c":[3,604604,17774],"b4f14e1b":[3,622378,20222],"1d4c9bb8":[3,642600,17054],"1d0f077f":[3,659654,17054],"3d055d47":[3,676708,17054],"abffb8b5":[3,693762,15182],"45ce02d7":[3,708944,17054],"a6c39573":[3,725998,17054],"b5477ad2":[3,743052,13886],"284c498f":[3,756938,13886],"d6684a8d":[3,770824,17054],"6e66563a":[3,787878,17054],"02ff8a03":[3,804932,17054],"36db530d":[3,821986,17054],"8b632ec4":[3,839040,17054],"ea08062c":[3,856094,17054],"3c5e5dc3":[3,873148,13886],"207c46c3":[3,887034,17054],"5862e135":[3,904088,17054],"dfc2e372":[3,921142,17054],"4d9ae058":[3,938196,17054],"e1d1e34e":[3,955250,17054],"4777990d":[3,972304,17054],"16c56aca":[4,0,17054],"78c80c72":[4,17054,17054],"41ea8d28":[4,34108,17054],"be258a7c":[4,51162,17054],"af48f28b":[4,68216,17054],"14e15dfe":[4,85270,17054],"874e2d17":[4,102324,17054],"844cd5a1":[4,119378,17054],"37f6a0b1":[4,136432,17054],"14fb8f72":[4,153486,17054],"509ae511":[4,170540,17054],"442a8ef8":[4,187594,17054],"343b1352":[4,204648,17054],"91f79202":[4,221702,17054],"d49af03f":[4,238756,17054],"ca5a7e34":[4,255810,17054],"0a303726":[4,272864,17054],"223af6fc":[4,289918,17054],"e239a81d":[4,306972,17054],"3259564b":[4,324026,17054],"eeb50865":[4,341080,17054],"683625c2":[4,358134,17054],"bdc8e630":[4,375188,17054],"62cf6955":[4,392242,17054],"4c53978f":[4,409296,17054],"bd65a9ad":[4,426350,17054],"07101b63":[4,443404,17054],"fd19ada5":[4,460458,17054],"b56ea394":[4,477512,17198],"62057d6b":[4,494710,17054],"4638326e":[4,511764,17054],"6121596f":[4,528818,17054],"343ccac2":[4,545872,17054],"ed3717ea":[4,562926,17054],"63659813":[4,579980,17342],"9ff322f6":[4,597322,17486],"38ae0f00":[4,614808,21230],"80f8a2a6":[4,636038,11232],"7f4351fd":[4,647270,11232],"0664a695":[4,658502,11232],"a0671dd9":[4,669734,14976],"bd449866":[4,684710,11664],"3d76bb1a":[4,696374,12816],"33044bdf":[4,709190,11520],"57cd273c":[4,720710,19502],"9922914e":[4,740212,8928],"dc390793":[4,749140,11232],"aba3b121":[4,760372,11808],"386c62bd":[4,772180,11232],"4a58cd1d":[4,783412,11232],"37c3d586":[4,794644,20304],"60472b12":[4,814948,19440],"7f1ad107":[4,834388,12960],"10e6fd0d":[4,847348,19872],"f534ccef":[4,867220,15264],"26792ed3":[4,882484,20880],"ee0ace22":[4,903364,13824],"25053fa6":[4,917188,15984],"277f7e36":[4,933172,16416],"521ee951":[4,949588,15984],"27af3635":[4,965572,14544],"82ef04f9":[4,980116,14112],"95c3336f":[5,0,17856],"e40b5154":[5,17856,28574],"5e45bddf":[5,46430,17774],"3fbdd360":[5,64204,21518],"e06ebb4e":[5,85722,19070],"8f079c7c":[5,104792,24398],"7c4a75c7":[5,129190,20366],"c52d8fae":[5,149556,24254],"33631c98":[5,173810,24398],"8ad1e2e8":[5,198208,18350],"19c3a0fb":[5,216558,17054],"fc43ff4d":[5,233612,17054],"4b62ccbe":[5,250666,17054],"e59c17bd":[5,267720,17054],"4e4d30f8":[5,284774,17054],"2a6d046c":[5,301828,17054],"9425be4b":[5,318882,17054],"0608054d":[5,335936,17054],"03a3f0f0":[5,352990,17054],"ed77d441":[5,370044,20366],"129fa650":[5,390410,20078],"d90e5b63":[5,410488,17918],"256fee57":[5,428406,21662],"d86ca545":[5,450068,20798],"2154bad9":[5,470866,18926],"02233903":[5,489792,19934],"11b721c3":[5,509726,17342],"0fdb3f98":[5,527068,18062],"0246518a":[5,545130,17630],"c2579479":[5,562760,20798],"fa61ebac":[5,583558,20510],"3df7a1a7":[5,604068,17054],"60bc6230":[5,621122,17630],"ea315652":[5,638752,17198],"5b2e7498":[5,655950,17054],"5cfa411d":[5,673004,17054],"37a3b316":[5,690058,17054],"d731002b":[5,707112,20942],"b01c764d":[5,728054,17054],"1ac9fff6":[5,745108,17054],"476bb075":[5,762162,17054],"22e2e6fd":[5,779216,17054],"562b9cd7":[5,796270,17054],"0aa793e4":[5,813324,15696],"40bac00e":[5,829020,12816],"cbc256f3":[5,841836,11232],"44e23bd3":[5,853068,11232],"25d1db63":[5,864300,11232],"af1117b1":[5,875532,13824],"a65693ed":[5,889356,14544],"b536dc64":[5,903900,11232],"5062b522":[5,915132,11232],"6ee44e5d":[5,926364,11232],"ae3165fb":[5,937596,11232],"dd4f539d":[5,948828,13968],"d0a5df7f":[5,962796,16704],"225bd15a":[5,979500,13536],"5c04acc2":[6,0,13824],"35bcea24":[6,13824,12240],"cb859f02":[6,26064,12960],"230f1395":[6,39024,14256],"0a7d3c20":[6,53280,13536],"b8fdba0e":[6,66816,15408],"aa2e4c30":[6,82224,11952],"e755df3c":[6,94176,12816],"aed909f1":[6,106992,15408],"b23b85dc":[6,122400,16272],"bb70fd54":[6,138672,13680],"439a703c":[6,152352,15120],"e8993750":[6,167472,16128],"7064369c":[6,183600,15984],"cd83b8b8":[6,199584,11232],"6b316a9d":[6,210816,12096],"bf52b6a7":[6,222912,13392],"a03a7da5":[6,236304,15264],"8d4f1411":[6,251568,12672],"89faacfb":[6,264240,13968],"63a03cf8":[6,278208,19358],"8f7c2acd":[6,297566,18782],"764a5402":[6,316348,17774],"ca5c5c2c":[6,334122,19646],"90cfe238":[6,353768,22382],"c9979c68":[6,376150,19358],"e60ff6a8":[6,395508,21662],"b1645217":[6,417170,17342],"ccfbb6a9":[6,434512,22094],"0bbf8149":[6,456606,20798],"7b2359db":[6,477404,19934],"402069fc":[6,497338,22238],"efe85c8e":[6,519576,17918],"6bf385c9":[6,537494,20510],"ec6b3e41":[6,558004,13248],"7271ec84":[6,571252,11808],"ce660662":[6,583060,14544],"e9a29c8e":[6,597604,16272],"52798562":[6,613876,11664],"7960c410":[6,625540,17136],"2f7ed9c7":[6,642676,13536],"e1df72c2":[6,656212,11952],"013399f2":[6,668164,13680],"42cfdaff":[6,681844,12240],"7601d4ba":[6,694084,12672],"3ecd26ab":[6,706756,11664],"aef0233a":[6,718420,13680],"8f8937a4":[6,732100,17054],"25e02808":[6,749154,19502],"9ea49a47":[6,768656,24398],"12407474":[6,793054,20078],"50a70288":[6,813132,19358],"9af17c10":[6,832490,22238],"f79f4933":[6,854728,21518],"9db90ad7":[6,876246,17054],"35f90e77":[6,893300,25838],"7720559b":[6,919138,24254],"7f650d94":[6,943392,24830],"64c0c300":[6,968222,19790],"8edcb8c1":[7,0,19152],"316ac6fb":[7,19152,11520],"31d88d1f":[7,30672,14976],"77c5e1b4":[7,45648,18720],"697565d4":[7,64368,14544],"4a9fa70b":[7,78912,14256],"6dadbab2":[7,93168,15264],"43527330":[7,108432,11952],"cf09fac3":[7,120384,12672],"9386d79d":[7,133056,25838],"53abd48a":[7,158894,19358],"82278571":[7,178252,24542],"411402ba":[7,202794,19070],"bdfb1351":[7,221864,33902],"5c15ef59":[7,255766,20222],"232f5a76":[7,275988,21086],"6c1f2682":[7,297074,22382],"09f7a2c2":[7,319456,19358],"1166f584":[7,338814,17054],"f1230791":[7,355868,17054],"2de8d4c2":[7,372922,17054],"29a25892":[7,389976,17054],"01b07ba7":[7,407030,17054],"f9c423de":[7,424084,17054],"2953a10a":[7,441138,17054],"b182ff6e":[7,458192,17054],"9c861e4e":[7,475246,17054],"94561919":[7,492300,17054],"b7e0993a":[7,509354,17054],"b575b2cc":[7,526408,17054],"f5e1a3f5":[7,543462,18206],"8b5cc509":[7,561668,22670],"b6ce7b96":[7,584338,17054],"6caae7c3":[7,601392,19214],"1b67d2c0":[7,620606,27134],"ef6cc227":[7,647740,20366],"b12e1b09":[7,668106,18494],"7dc92228":[7,686600,17054],"cf5fdd63":[7,703654,11232],"5578a2d8":[7,714886,17630],"99df117a":[7,732516,20078],"49cb99a8":[7,752594,17054],"ac987fe1":[7,769648,20078],"dbf9c31e":[7,789726,19790],"11452c74":[7,809516,17630],"2182c786":[7,827146,22094],"7f9e0327":[7,849240,17054],"162c4842":[7,866294,17054],"0e82dad5":[7,883348,21230],"bc6bad5e":[7,904578,18926],"37b9ee52":[7,923504,17630],"8db9f104":[7,941134,18494],"f62bd9dd":[7,959628,21230],"84ebb2cb":[8,0,19358],"ed245fc2":[8,19358,22238],"f61c2d6b":[8,41596,16272],"f0ffd3ca":[8,57868,12672],"06680b3b":[8,70540,13824],"5b0b44e3":[8,84364,16704],"34a6ff78":[8,101068,11664],"a3908a3b":[8,112732,13824],"30b120a3":[8,126556,17712],"3ff05e4a":[8,144268,14832],"3057c206":[8,159100,12816],"e6bdc24a":[8,171916,14544],"82309253":[8,186460,24974],"0279c61f":[8,211434,20222],"83a2cebd":[8,231656,17774],"c6a15eb4":[8,249430,17054],"27505bb5":[8,266484,20510],"275d1d33":[8,286994,28574],"8723980d":[8,315568,18062],"2fb43232":[8,333630,18926],"663e3526":[8,352556,21374],"1f43bc82":[8,373930,17486],"874eb109":[8,391416,19646],"9e5203e7":[8,411062,21518],"c6bd8315":[8,432580,19790],"4e4eeffa":[8,452370,17054],"4c256ed5":[8,469424,17054],"51d02b3a":[8,486478,17054],"c02bc337":[8,503532,17054],"79b1b377":[8,520586,16334],"47ee3090":[8,536920,17054],"03801290":[8,553974,17054],"21945874":[8,571028,17054],"c74c807a":[8,588082,15470],"d47396c4":[8,603552,19358],"cd623515":[8,622910,20654],"db4661f2":[8,643564,17342],"798cc7f6":[8,660906,12960],"e978914f":[8,673866,17280],"6bcf9bdf":[8,691146,12096],"5a47281e":[8,703242,11232],"1d45167f":[8,714474,18432],"393480c9":[8,732906,11952],"c6b2b566":[8,744858,17136],"c3637bad":[8,761994,11664],"38e6f07b":[8,773658,13968],"be7e7c4e":[8,787626,15984],"6f79b8e5":[8,803610,14400],"fbf096dd":[8,818010,11232],"13006dc3":[8,829242,11376],"05eb055c":[8,840618,12240],"d2414aaa":[8,852858,19584],"fcd4cd1c":[8,872442,16704],"91811108":[8,889146,12384],"f55875d9":[8,901530,19152],"d2309efe":[8,920682,16704],"61de41e5":[8,937386,14400],"3517b5f7":[8,951786,15264],"3d72b1da":[8,967050,18720],"f26e23dc":[9,0,15696],"d06c50c9":[9,15696,12672],"f694b237":[9,28368,13968],"62f3ae42":[9,42336,18144],"d8b9dd9c":[9,60480,13968],"0377fc7b":[9,74448,11376],"c29756f9":[9,85824,12816],"abad023b":[9,98640,12672],"31d786c8":[9,111312,11232],"8bb5b887":[9,122544,11952],"0360c07c":[9,134496,12816],"652211e7":[9,147312,12096],"6b2f04b1":[9,159408,12672],"106d2f4b":[9,172080,17424],"318a41e9":[9,189504,13536],"4a242b6a":[9,203040,22752],"cec0aa8f":[9,225792,11232],"e39656d8":[9,237024,14976],"49d28ab7":[9,252000,12672],"2694c51e":[9,264672,11808],"6129467c":[9,276480,10656],"783b5bcc":[9,287136,11376],"59bbbf07":[9,298512,11232],"2c2f04ef":[9,309744,11808],"a03d83dd":[9,321552,13392],"ef246e98":[9,334944,12672],"d54c858c":[9,347616,12816],"2d025117":[9,360432,16128],"476a9045":[9,376560,15840],"7917f652":[9,392400,15120],"3b3ff804":[9,407520,12096],"4bafc9f3":[9,419616,15264],"b0d19dea":[9,434880,15552],"3603e5b7":[9,450432,18000],"b7d19cf2":[9,468432,13392],"28d14a07":[9,481824,13824],"2b6aba36":[9,495648,17280],"89ea3f5f":[9,512928,14688],"7f48ff6e":[9,527616,29438],"f7b5afdb":[9,557054,24974],"63a36cd0":[9,582028,33326],"d89f8d70":[9,615354,26990],"d45e51f4":[9,642344,23966],"0e02022a":[9,666310,26846],"b4f1708c":[9,693156,32030],"f8c172a7":[9,725186,30014],"0cf43147":[9,755200,30302],"e883a0e2":[9,785502,31310],"5ddef928":[9,816812,26558],"7d2f7fae":[9,843370,23966],"b644f55b":[9,867336,25488],"d47ef5a0":[9,892824,15696],"746fd7df":[9,908520,14976],"635e5711":[9,923496,14832],"94a9792b":[9,938328,17136],"09490de3":[9,955464,23472],"8f8b31ad":[9,978936,17424],"2ada423f":[10,0,14544],"2df38c03":[10,14544,22608],"0ff8aa95":[10,37152,13824],"554e8f56":[10,50976,11232],"30bba5e3":[10,62208,11952],"53981e05":[10,74160,11952],"054b65fb":[10,86112,13104],"5cbcfdcc":[10,99216,12240],"af4f38f6":[10,111456,11232],"f102c476":[10,122688,11808],"8513d36a":[10,134496,14832],"54499093":[10,149328,14256],"c90facb9":[10,163584,13968],"adb78a55":[10,177552,15120],"d22863fe":[10,192672,11376],"65a8c97d":[10,204048,16128],"f236351a":[10,220176,11376],"334adccb":[10,231552,13536],"6a0bcb9e":[10,245088,12096],"a57f900c":[10,257184,13968],"8947c93d":[10,271152,11664],"78057045":[10,282816,11376],"1167fd5c":[10,294192,12240],"726ba0fa":[10,306432,11232],"d49f6cc3":[10,317664,11376],"345aa2e5":[10,329040,11232],"9eff4e4a":[10,340272,12240],"8f795a6a":[10,352512,11376],"7b4778d0":[10,363888,11952],"d7b73ef9":[10,375840,12816],"5c731ea3":[10,388656,14112],"9ed843e6":[10,402768,11232],"4ff1aa84":[10,414000,11232],"17a4a792":[10,425232,25056],"716ffd46":[10,450288,19872],"fd7210be":[10,470160,13680],"f5a764d0":[10,483840,14544],"2ab65bfe":[10,498384,12960],"8468da78":[10,511344,12528],"6b4ce6e0":[10,523872,16848],"bb913788":[10,540720,11520],"a1705da0":[10,552240,12096],"6ac2df15":[10,564336,11808],"e57ef2a2":[10,576144,11664],"3af272a2":[10,587808,12384],"293cf426":[10,600192,12240],"f200f7be":[10,612432,12096],"7d801d1b":[10,624528,12096],"e2262c0d":[10,636624,13104],"8b754ee4":[10,649728,12528],"e0c13245":[10,662256,13392],"8aad42cf":[10,675648,11232],"4b561dec":[10,686880,20880],"71df768d":[10,707760,15408],"08219fe1":[10,723168,11808],"13e8bef5":[10,734976,13968],"1b2720b6":[10,748944,10368],"3da331ae":[10,759312,14256],"d9bdfd9d":[10,773568,11664],"eaa64afa":[10,785232,12672],"55265720":[10,797904,11808],"6010c889":[10,809712,13536],"98c3638f":[10,823248,13680],"5f80f559":[10,836928,12672],"b47ae1b1":[10,849600,12672],"d50ad0a3":[10,862272,12672],"f27b3be5":[10,874944,14400],"f79556ed":[10,889344,13968],"cb589541":[10,903312,12816],"10b4cc83":[10,916128,15696],"ec60d85c":[10,931824,11664],"7cab118d":[10,943488,12384],"79a1d3b6":[10,955872,11808],"61610fba":[10,967680,13392],"9b559639":[10,981072,18432],"7080a332":[11,0,12960],"a9577ac4":[11,12960,15696],"57c3a4e4":[11,28656,11952],"a40ed08e":[11,40608,12384],"d63c1580":[11,52992,15120],"b3e55c9c":[11,68112,14688],"001fa1da":[11,82800,14256],"04527b72":[11,97056,20880],"7e042303":[11,117936,17136],"fc6be027":[11,135072,11952],"6a07b954":[11,147024,11520],"ab64ea88":[11,158544,13680],"5c399fb0":[11,172224,14112],"7f22236f":[11,186336,12816],"af9f72a2":[11,199152,11232],"90ec8438":[11,210384,12672],"aa7bdd7f":[11,223056,12240],"4341c8cb":[11,235296,17568],"396b39c0":[11,252864,12528],"fb569b23":[11,265392,14832],"370069b5":[11,280224,14112],"874058bf":[11,294336,13392],"3243a360":[11,307728,13968],"cba2deb4":[11,321696,11232],"0352492d":[11,332928,12384],"aafd48ce":[11,345312,15552],"828eeafd":[11,360864,13680],"510e18d7":[11,374544,14976],"8300f546":[11,389520,14112],"146d3aec":[11,403632,23616],"32e613ac":[11,427248,14688],"fae50fea":[11,441936,20448],"9839ae6f":[11,462384,22320],"dcc09d57":[11,484704,21744],"c24574ce":[11,506448,23616],"81925dac":[11,530064,20880],"870463ba":[11,550944,22032],"6ecc1e8d":[11,572976,20736],"c88c26fd":[11,593712,19584],"f990cf00":[11,613296,18432],"d23e3464":[11,631728,18576],"b7fdb85e":[11,650304,17424],"011344e6":[11,667728,20160],"f43d11ec":[11,687888,14400],"0a1f8b1a":[11,702288,16704],"4b7c7ff9":[11,718992,17424],"319f7759":[11,736416,15120],"ce67f83c":[11,751536,14400],"fc67150d":[11,765936,15408],"a803af79":[11,781344,13104],"9f5898fb":[11,794448,13392],"f4b9ff03":[11,807840,20880],"b0a6293f":[11,828720,13104],"cad22acf":[11,841824,20160],"dc24c950":[11,861984,20304],"31206959":[11,882288,15408],"d96f6e83":[11,897696,16128],"3159e97d":[11,913824,15264],"95e1bd62":[11,929088,12816],"8a9a7faf":[11,941904,14976],"44c48f72":[11,956880,19872],"a238fbc4":[11,976752,15552],"5ecffcc2":[12,0,11520],"34c0655e":[12,11520,12240],"a426dcca":[12,23760,13536],"c7b99a83":[12,37296,16848],"bc56aff4":[12,54144,11232],"1fcd2fed":[12,65376,12528],"46a81795":[12,77904,11520],"fc78f7d8":[12,89424,12096],"f899c150":[12,101520,12672],"ea7fe675":[12,114192,13392],"2e8678e8":[12,127584,14976],"28d1ed08":[12,142560,11232],"1179a8cc":[12,153792,11232],"331b8691":[12,165024,11232],"52f4b3e9":[12,176256,11232],"d310c495":[12,187488,17136],"0cb1ef3d":[12,204624,14976],"3573db52":[12,219600,14688],"da1aa304":[12,234288,11232],"760ef6cd":[12,245520,13104],"58de59fd":[12,258624,12240],"0bce5b6c":[12,270864,12384],"ede26d2b":[12,283248,16128],"ea3e1272":[12,299376,13104],"905fefbb":[12,312480,11232],"13ef34a4":[12,323712,13680],"ad0760d7":[12,337392,17568],"3a447b9f":[12,354960,11952],"55bcd424":[12,366912,13968],"84a5e8b9":[12,380880,14832],"66d3cba5":[12,395712,12672],"505418ea":[12,408384,11232],"fb1ef509":[12,419616,11232],"2972a5fc":[12,430848,14112],"e738e5ee":[12,444960,12816],"a82d9589":[12,457776,12528],"75d6401d":[12,470304,15264],"d476cbab":[12,485568,16272],"5ab14796":[12,501840,15120],"612159cc":[12,516960,15552],"7f940d27":[12,532512,13248],"c02fe63c":[12,545760,14112],"4271ca9a":[12,559872,16848],"9e841f99":[12,576720,14688],"c0619989":[12,591408,14112],"f3198585":[12,605520,14400],"6cdffbdb":[12,619920,17856],"7608cd3e":[12,637776,11232],"aa8e951c":[12,649008,11232],"9a6bb96c":[12,660240,14976],"bb2ec007":[12,675216,11232],"49b6a30e":[12,686448,14688],"c15e762f":[12,701136,15264],"634d3a13":[12,716400,15696],"1800c9ce":[12,732096,14544],"68cc68c6":[12,746640,12528],"afe9f4b7":[12,759168,18144],"8f6bbaa4":[12,777312,14256],"912912a8":[12,791568,16128],"d8f0cbeb":[12,807696,10656],"de49b206":[12,818352,11232],"f9dc9cb8":[12,829584,13824],"81fa4b17":[12,843408,13680],"43919b81":[12,857088,18144],"10fbb08f":[12,875232,18288],"c4a8d487":[12,893520,12816],"05662047":[12,906336,23040],"a3efd5c3":[12,929376,14256],"36da6b83":[12,943632,20160],"70213c21":[12,963792,13392],"a8b96ace":[12,977184,18432],"90d3c54f":[13,0,18288],"f35c8556":[13,18288,16272],"c85bbfd8":[13,34560,13680],"ab01e123":[13,48240,12528],"089eb61c":[13,60768,13968],"9de32e37":[13,74736,12240],"1afb5b58":[13,86976,20304],"265a8521":[13,107280,13968],"05ba3520":[13,121248,13248],"e65ac5c3":[13,134496,13392],"84709e3d":[13,147888,17280],"d624b2f2":[13,165168,11808],"b04834c7":[13,176976,14688],"2283efc7":[13,191664,14256],"832428b8":[13,205920,15840],"d8143210":[13,221760,13392],"eebd73d0":[13,235152,13392],"2cafd0e7":[13,248544,14112],"5debf39d":[13,262656,14400],"36c753a7":[13,277056,12384],"f0120001":[13,289440,14544],"7926fef2":[13,303984,12384],"d114f79d":[13,316368,15120],"e831cef9":[13,331488,14400],"4e5d55d3":[13,345888,15696],"3eeae1f0":[13,361584,15696],"75dff859":[13,377280,13536],"100ad899":[13,390816,16272],"93fced71":[13,407088,22320],"0d73f511":[13,429408,20736],"0a00e5de":[13,450144,20736],"712d78ec":[13,470880,23328],"8421c750":[13,494208,20304],"3164d871":[13,514512,18144],"41710d69":[13,532656,21888],"6215bc9e":[13,554544,14256],"fe3103b0":[13,568800,20736],"535d55c7":[13,589536,16128],"f0ea49bb":[13,605664,17856],"bb4cc6a6":[13,623520,16272],"464e3f03":[13,639792,17568],"e37013c3":[13,657360,17856],"dac8a7c3":[13,675216,17712],"28c4d50d":[13,692928,15840],"d4a152d7":[13,708768,17424],"989d1ff1":[13,726192,15552],"ceec6d74":[13,741744,16704],"7d2a4cd4":[13,758448,21600],"0f45bec9":[13,780048,22896],"778f5f94":[13,802944,15840],"545914c3":[13,818784,16704],"f6a68a03":[13,835488,20592],"5c6e7c36":[13,856080,21456],"477669af":[13,877536,21888],"fd7e1385":[13,899424,17136],"c9e99e41":[13,916560,19152],"3e2a2740":[13,935712,16992],"527b045e":[13,952704,18144],"6dc20b95":[13,970848,15408],"faf5d1d6":[14,0,16848],"7b0931ad":[14,16848,16272],"f8b53135":[14,33120,21456],"1533c510":[14,54576,14112],"5898dd58":[14,68688,24048],"d3c696ba":[14,92736,13968],"edabfbc3":[14,106704,13104],"c57e2e93":[14,119808,18576],"3e479959":[14,138384,14688],"7ff06ec7":[14,153072,15408],"8a47121b":[14,168480,13968],"46e76394":[14,182448,12960],"cccc596e":[14,195408,15120],"d359d128":[14,210528,14400],"9c337cd6":[14,224928,16128],"12065601":[14,241056,12528],"32a67796":[14,253584,11520],"f965225c":[14,265104,16992],"7cff6288":[14,282096,18432],"34d63637":[14,300528,14544],"ea0a32ff":[14,315072,12528],"829c9f76":[14,327600,13824],"74586362":[14,341424,12816],"d8d6e931":[14,354240,14976],"f3b757c4":[14,369216,12816],"24813755":[14,382032,12384],"28bd4ba7":[14,394416,12384],"a69e3c59":[14,406800,14688],"79a8ddb8":[14,421488,15408],"5268314a":[14,436896,15696],"29181210":[14,452592,14112],"6c04efd2":[14,466704,28944],"37020853":[14,495648,17568],"df55e946":[14,513216,19872],"ecd62a92":[14,533088,24624],"95f097eb":[14,557712,13392],"f1b96612":[14,571104,21744],"07ffc2e6":[14,592848,25344],"7f47c01d":[14,618192,17856],"621705db":[14,636048,23184],"43b3ac79":[14,659232,18288],"3d1df281":[14,677520,19152],"a44de878":[14,696672,22320],"18f1d46c":[14,718992,19296],"b3ed8ee7":[14,738288,15840],"20757f17":[14,754128,21024],"599f46ce":[14,775152,19728],"cccefb9c":[14,794880,16704],"39c9e90a":[14,811584,21312],"9adecb50":[14,832896,15840],"a7a56ffd":[14,848736,20304],"03cd77fa":[14,869040,14832],"812bc494":[14,883872,22176],"9b5c60f1":[14,906048,14112],"495b1e7b":[14,920160,15840],"5e973e53":[14,936000,15696],"77e823f5":[14,951696,18864],"d9a1d984":[14,970560,24624],"e89e15b5":[15,0,18864],"e07c76e3":[15,18864,16848],"67cb237b":[15,35712,15120],"bcd86ff1":[15,50832,16272],"cce9c032":[15,67104,19296],"f0e5e385":[15,86400,20880],"ddd460e4":[15,107280,11232],"005b15ce":[15,118512,18000],"25e7c289":[15,136512,12384],"c9a6a2d3":[15,148896,24624],"9839a61e":[15,173520,17136],"20e37a7d":[15,190656,26784],"bb6774ae":[15,217440,22896],"d45e97d8":[15,240336,20592],"5393e6bf":[15,260928,20304],"b490460f":[15,281232,23616],"949c22e7":[15,304848,19008],"ecb1b5ce":[15,323856,17856],"ba1c20e2":[15,341712,25344]};
+let spTok=0;const packs={};
+function packUrl(n){return typeof n==="string"?"audio/"+n+".mp3":"audio/pack"+String(n).padStart(2,"0")+".mp3"}
+function getPack(n){return packs[n]||(packs[n]=fetch(packUrl(n)).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).catch(e=>{delete packs[n];throw e}))}
+const SA=new Audio();SA.preload="auto";
+(function(){let ok=false;const un=()=>{if(ok||au)return;ok=true;try{SA.src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";const p=SA.play();if(p&&p.catch)p.catch(()=>{ok=false})}catch(e){ok=false}};
+  ["touchend","click"].forEach(ev=>document.addEventListener(ev,un,{capture:true,passive:true}))})();
+function playFile(url,t,cb,alt){
+  const a=SA;a.onerror=null;a.onended=null;try{a.pause()}catch(e){}
+  a.src=url;a.load();
+  au=a;let used=false;
+  const fb=()=>{if(used||au!==a)return;used=true;au=null;if(alt)alt();else speakSys(t,cb)};
+  a.playbackRate=slow?0.75:1;
+  a.onerror=fb;
+  a.onended=()=>{if(au===a)au=null;if(cb)cb()};
+  const p=a.play();if(p&&p.catch)p.catch(fb);
+}
+const clips={};
+function getClip(h,e){
+  if(clips[h])return clips[h];
+  const n=e[0],off=e[1],len=e[2];
+  const full=packs[n];
+  const p=(full?full.then(buf=>buf.slice(off,off+len)):
+    fetch(packUrl(n),{headers:{Range:"bytes="+off+"-"+(off+len-1)}}).then(r=>{
+      if(!r.ok)throw 0;
+      return r.arrayBuffer().then(b=>b.byteLength===len?b:b.slice(off,off+len));
+    }).catch(()=>getPack(n).then(buf=>buf.slice(off,off+len))));
+  clips[h]=p.catch(x=>{delete clips[h];throw x});
+  return clips[h];
+}
+const FX=new Set(["20e37a7d", "5898dd58", "f6a68a03"]);
+let XP=[];
+fetch("audio/extra.json",{cache:"no-cache"}).then(r=>r.ok?r.json():{}).then(x=>{const s=new Set();for(const k in x){PK[k]=x[k];FX.delete(k);s.add(x[k][0])}XP=[...s]}).catch(()=>{});
+function speak(t,cb){
+  stopAll();
+  const h=fnv(ttsText(t)),e=PK[h],tok=++spTok;
+  if(!e){playFile("audio/"+h+".mp3",t,cb);return}
+  const viaPack=()=>getClip(h,e).then(b=>{
+    if(tok!==spTok)return;
+    playFile(URL.createObjectURL(new Blob([b],{type:"audio/mpeg"})),t,cb);
+  }).catch(()=>{if(tok===spTok)playFile("audio/"+h+".mp3",t,cb)});
+  if(FX.has(h)){playFile("audio/"+h+".mp3",t,cb,()=>{if(tok===spTok)viaPack()});return}
+  viaPack();
+}
+function playMine(i,b){if(!recs[i])return;if(cur)cur.pause();cur=new Audio(recs[i]);if(b)markPlay(b);cur.onended=cur.onerror=clearPlay;cur.play()}
+function setMsg(i,t){const m=document.getElementById("m"+i);if(m)m.textContent=t}
+let mr=null,mi=-1,stream=null;
+async function toggleRec(i,btn){
+  if(mr&&mr.state==="recording"){mr.stop();return}
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    const chunks=[];mr=new MediaRecorder(stream);mi=i;
+    mr.ondataavailable=e=>chunks.push(e.data);
+    mr.onstop=()=>{
+      stream.getTracks().forEach(t=>t.stop());
+      if(recs[i])URL.revokeObjectURL(recs[i]);
+      recs[i]=URL.createObjectURL(new Blob(chunks,{type:mr.mimeType||"audio/webm"}));
+      btn.setAttribute("aria-pressed","false");btn.innerHTML=IC.mic+"<span>重錄</span>";
+      document.querySelectorAll('[data-a="mine"][data-i="'+i+'"],[data-a="cmp"][data-i="'+i+'"]').forEach(b=>b.disabled=false);
+      setMsg(i,"已錄好，點「我的」或「對比」。");
+    };
+    mr.start();btn.setAttribute("aria-pressed","true");btn.innerHTML=IC.stop+"<span>停止</span>";setMsg(i,"錄音中……說完點「停止」。");
+  }catch(e){
+    setMsg(i,"無法使用麥克風：請允許權限；若仍不行，請在新視窗或手機瀏覽器中打開本頁。");
+  }
+}
+const IC=(()=>{const f=d=>'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>';return{
+play:f('<path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/>'),
+mic:f('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>'),
+stop:f('<rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/>'),
+me:f('<circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/>'),
+cmp:f('<path d="M4 8h13M14 4.5 17.5 8 14 11.5M20 16H7M10 12.5 6.5 16 10 19.5"/>'),
+book:f('<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5v-15z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3M9 8h6"/>'),
+check:f('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
+x:f('<path d="M6 6l12 12M18 6L6 18"/>')}})();
+function curIdx(){return mode==="r"?rl:mode==="s"?sr:D.map((d,i)=>i).filter(i=>D[i][0]===cat)}
+function render(){
+  const g=$("#grid");g.innerHTML="";const L=curIdx();
+  L.forEach(i=>{
+    const d=D[i];
+    const c=document.createElement("div");c.className="card"+(done.has(i)&&mode!=="r"?" done":"");
+    const last=mode==="r"?
+      '<button class="ib no" data-a="no" data-i="'+i+'" aria-label="忘了，明天再複習">'+IC.x+'<span>忘了</span></button>'+
+      '<button class="ib yes" data-a="yes" data-i="'+i+'" aria-label="記得，拉長複習間隔">'+IC.check+'<span>記得</span></button>':
+      '<button class="ib ok" data-a="ok" data-i="'+i+'" aria-pressed="'+done.has(i)+'">'+IC.check+'<span>'+(done.has(i)?"已掌握":"標記掌握")+'</span></button>';
+    c.innerHTML=(mode?'<div class="catl">'+d[0]+'</div>':'')+'<div class="han">'+d[1]+'</div><div class="jp">'+jp(d[2])+'</div><div class="mean">'+d[3]+'</div>'+
+    '<div class="row"><button class="ib" data-a="play" data-i="'+i+'" aria-label="播放標準音">'+IC.play+'<span>播放</span></button>'+
+    '<button class="ib rec" data-a="rec" data-i="'+i+'" aria-pressed="false" aria-label="跟讀並錄音">'+IC.mic+'<span>跟讀</span></button>'+
+    '<button class="ib" data-a="mine" data-i="'+i+'"'+(recs[i]?"":" disabled")+' aria-label="播放我的錄音">'+IC.me+'<span>我的</span></button>'+
+    '<button class="ib" data-a="cmp" data-i="'+i+'"'+(recs[i]?"":" disabled")+' aria-label="對比標準音和我的錄音">'+IC.cmp+'<span>對比</span></button>'+
+    '<a class="b ib dict" target="_blank" rel="noopener" aria-label="在粵典查看真人發音" href="https://words.hk/zidin/'+encodeURIComponent(d[1].split("、")[0].replace(/…+/g,""))+'">'+IC.book+'<span>粵典</span></a>'+
+    last+'</div>'+
+    '<div class="msg" id="m'+i+'"></div>';
+    g.appendChild(c);
+  });
+  if(!L.length)g.innerHTML=mode==="r"?'<p class="empty">今天的複習完成了，明天再來。</p>':mode==="s"?'<p class="empty">沒有找到相關詞句。</p>':'';
+  if(mode==="r")$("#prog").textContent="今日複習：還剩 "+rl.length+" 條";
+  else if(mode==="s")$("#prog").textContent="搜索結果："+sr.length+" 條";
+  else{const s=stat(cat);$("#prog").textContent=cat+"：已掌握 "+s[0]+" / "+s[1]}
+}
+function stat(c){let t=0,n=0;D.forEach((d,i)=>{if(d[0]===c){t++;if(done.has(i))n++}});return[n,t]}
+function home(){
+  const h=$("#home");h.innerHTML="";let k=0;
+  if(done.size){
+    const due=dueList().length,b=document.createElement(due?"a":"div");b.className="rv"+(due?"":" none");
+    if(due){b.href="#r";b.innerHTML="<b>今日複習</b><span>"+due+" 條待複習，每次 20 條</span>"}
+    else b.textContent="今日複習：暫時沒有要複習的卡片";
+    h.appendChild(b);
+  }
+  PLAN.forEach((c,ci)=>{
+    let N=0,T=0,hit=false;
+    const ls=c[1].map((n,j)=>{
+      const s=stat(n),i=k++;if(i===lastK)hit=true;const nn=(ci+1)+'.'+(j+1)+' '+n;
+      if(!s[1])return'<div class="les todo"><b>'+nn+'</b><small>待開發</small></div>';
+      N+=s[0];T+=s[1];
+      return'<a class="les'+(s[0]===s[1]?' full':'')+'" href="#l'+i+'" data-k="'+i+'"><b>'+nn+'</b><small>'+s[0]+' / '+s[1]+' 條</small><div class="pb"><i style="width:'+Math.round(100*s[0]/s[1])+'%"></i></div></a>'}).join("");
+    if(hit)openSet=new Set([ci]);
+    const d=document.createElement("details");d.className="wk";d.open=openSet.has(ci);
+    d.ontoggle=()=>{
+      if(!d.isConnected)return;
+      if(d.open){
+        document.querySelectorAll("#home details.wk[open]").forEach(o=>{if(o!==d)o.open=false});
+        openSet=new Set([ci]);
+        if(d._ui)setTimeout(()=>d.scrollIntoView({behavior:"smooth",block:"start"}),30);
+      }else openSet.delete(ci);
+      d._ui=false;
+      try{localStorage.setItem("yue-open",JSON.stringify([...openSet]))}catch(e){}
+    };
+    d.innerHTML='<summary><b class="nm">'+(ci+1)+'、'+c[0]+'</b><span>'+(T?N+' / '+T:'待開發')+'</span><i class="chev" aria-hidden="true"></i></summary><p class="cd">'+c[2]+'</p><div class="lessons">'+ls+'</div>';
+    d.querySelector("summary").addEventListener("click",()=>{d._ui=true});
+    h.appendChild(d);
+  });
+  $("#prog").textContent="已掌握 "+done.size+" / "+D.length;
+}
+function go(k){try{location.hash=k===null?"":k==="r"?"r":"l"+k}catch(e){}route()}
+function route(){
+  cancelChain();
+  const m=/^#l(\d+)$/.exec(location.hash),list=FLAT;
+  mode=null;sr=[];
+  if(location.hash==="#r"){mode="r";rl=dueList().slice(0,20);cat=null}
+  else{cat=m&&list[+m[1]]||null;if(cat&&!stat(cat)[1])cat=null}
+  const lv=!!cat||mode==="r";
+  if(cat)lastK=+m[1];
+  $("#q").value="";
+  $("#home").hidden=lv;$("#grid").hidden=!lv;$("#legend").hidden=!lv;$("#back").hidden=!lv;$("#bottombar").hidden=!lv;$("#about").hidden=lv;$("#searchbar").hidden=lv;$("#pall").hidden=!lv;
+  stopAll();
+  if(lv){render();window.scrollTo(0,0)}
+  else{home();const t=lastK!==null&&document.querySelector('#home a[data-k="'+lastK+'"]');if(t)t.scrollIntoView({block:"center"});else window.scrollTo(0,0)}
+}
+$("#home").addEventListener("click",e=>{
+  const r=e.target.closest("a.rv");if(r){e.preventDefault();go("r");return}
+  const a=e.target.closest("a.les");if(a){e.preventDefault();go(+a.dataset.k)}
+});
+$("#q").addEventListener("input",()=>{
+  const q=$("#q").value.trim().toLowerCase();
+  cancelChain();stopAll();
+  if(!q){mode=null;sr=[];$("#home").hidden=false;$("#grid").hidden=true;$("#legend").hidden=true;$("#about").hidden=false;$("#pall").hidden=true;home();return}
+  const qn=q.replace(/[\s1-6]/g,""),hits=[];
+  for(let i=0;i<D.length&&hits.length<60;i++){
+    const d=D[i];
+    if(d[1].toLowerCase().includes(q)||d[3].toLowerCase().includes(q)||(qn&&/^[a-z]+$/.test(qn)&&d[2].toLowerCase().replace(/[\s1-6]/g,"").includes(qn)))hits.push(i);
+  }
+  mode="s";sr=hits;
+  $("#home").hidden=true;$("#grid").hidden=false;$("#legend").hidden=false;$("#about").hidden=true;$("#pall").hidden=false;
+  render();
+});
+let pa=0;
+function cancelChain(){pa++;const b=$("#pall");if(b){b.setAttribute("aria-pressed","false");b.innerHTML=IC.play+"<span>連播</span>"}}
+function playAll(){
+  const b=$("#pall");
+  if(b.getAttribute("aria-pressed")==="true"){cancelChain();stopAll();return}
+  const L=curIdx().slice();if(!L.length)return;
+  const my=++pa;b.setAttribute("aria-pressed","true");b.innerHTML=IC.stop+"<span>停止</span>";
+  const step=k=>{
+    if(my!==pa)return;
+    if(k>=L.length){cancelChain();return}
+    const i=L[k],btn=document.querySelector('#grid [data-a="play"][data-i="'+i+'"]');
+    if(btn){markPlay(btn);btn.closest(".card").scrollIntoView({block:"center",behavior:"smooth"})}
+    speak(D[i][1],()=>{clearPlay();if(my!==pa)return;setTimeout(()=>step(k+1),slow?1800:1200)});
+  };
+  step(0);
+}
+$("#pall").onclick=playAll;
+$("#back").onclick=()=>go(null);
+$("#back2").onclick=()=>go(null);
+$("#grid").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-a]");if(!b)return;
+  const i=+b.dataset.i,a=b.dataset.a;
+  if(a!=="ok"&&a!=="yes"&&a!=="no")cancelChain();
+  if(a==="play"){speak(D[i][1],clearPlay);markPlay(b)}
+  else if(a==="rec")toggleRec(i,b);
+  else if(a==="mine"){stopAll();playMine(i,b)}
+  else if(a==="cmp"){speak(D[i][1],()=>{playMine(i,b)});markPlay(b)}
+  else if(a==="yes"||a==="no"){const n=Date.now(),st=a==="yes"?Math.min(5,((ev[i]&&ev[i][2])||0)+1):0;ev[i]=[1,n,st,n+DAY*INT[st]];save();rl=rl.filter(x=>x!==i);render()}
+  else if(a==="ok"){const add=!done.has(i),n=Date.now();ev[i]=[add?1:0,n,0,n+DAY*INT[0]];save();render();if(add){const nb=document.querySelector('#grid [data-a="ok"][data-i="'+i+'"]');if(nb)nb.closest(".card").classList.add("pop")}}
+});
+$("#slow").onclick=e=>{slow=!slow;e.currentTarget.setAttribute("aria-checked",slow)};
+if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+$("#exp").onclick=()=>{
+  const data=JSON.stringify({app:"canfluent",v:2,t:Date.now(),done:[...done],ev});
+  const u=URL.createObjectURL(new Blob([data],{type:"application/json"}));
+  const a=document.createElement("a");a.href=u;a.download="canfluent-progress-"+new Date().toISOString().slice(0,10)+".json";
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);
+};
+$("#imp").onclick=()=>$("#impf").click();
+$("#impf").onchange=async e=>{
+  const f=e.target.files[0];e.target.value="";if(!f)return;
+  try{
+    const d=JSON.parse(await f.text());
+    if(!d||d.app!=="canfluent"||!Array.isArray(d.done))throw 0;
+    const add=d.done.filter(n=>Number.isInteger(n)&&n>=0&&n<D.length);
+    if(d.ev)ev=mergeEv(ev,cleanEv(d.ev));
+    else{const n=Date.now();add.forEach(i=>{if(!done.has(i))ev[i]=[1,n,0,n+DAY]})}
+    save();
+    setSync("已導入 "+add.length+" 項進度");
+    refresh();
+  }catch(err){alert("這個檔案不是有效的進度備份。")}
+};
+(function(){
+  try{localStorage.setItem("yue-test","1");localStorage.removeItem("yue-test")}
+  catch(e){setSync("此瀏覽器不允許保存進度，請定期點「導出進度」備份")}
+})();
+window.cfGet=()=>({ev:JSON.parse(JSON.stringify(ev)),t:lastT});
+window.cfApply=(m,t)=>{ev=cleanEv(m);rebuild();lastT=t||Date.now();persist();refresh()};
+window.cfMerge=(a,b)=>mergeEv(a,b);window.cfClean=cleanEv;window.cfEq=evEq;
+$("#offb").onclick=async()=>{
+  const st=$("#offs");
+  if(!("serviceWorker" in navigator)||!navigator.serviceWorker.controller){st.textContent="請關閉後重新打開本頁，再試一次。";return}
+  $("#offb").disabled=true;
+  try{
+    const L=[];for(let n=0;n<16;n++)L.push(n);XP.forEach(x=>L.push(x));
+    for(let q=0;q<L.length;q++){
+      st.textContent="下載中 "+q+" / "+L.length;
+      const r=await fetch(packUrl(L[q]));
+      if(!r.ok)throw 0;await r.arrayBuffer();
+    }
+    st.textContent="已完成，離線也能聽。";
+  }catch(e){st.textContent="下載中斷，稍後再試。"}
+  $("#offb").disabled=false;
+};
+if(!("serviceWorker" in navigator)||window.claude){$("#offb").closest("p").hidden=true;$("#offb").closest("p").previousElementSibling.hidden=true;$("#offb").closest("p").previousElementSibling.previousElementSibling.hidden=true}
+if("serviceWorker" in navigator&&!window.claude&&/^https?:$/.test(location.protocol)){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{})})}
+window.addEventListener("hashchange",route);route();initCloud();
+</script>
+</body>
+</html>
